@@ -57,7 +57,7 @@
 ## Study
 
 **읽는데 걸린 시간**
-- 읽는데 3.5시간 + 정리하는데 1.5시간
+- 읽는데 3.5시간 + 정리하는데 1:45 시간
 - Pages : 9 (Excluding References, Appendix)
 
 **알게 된 지식**
