@@ -18,7 +18,7 @@ ground-truth answer-span으로부터 context에 대한 label을 직접 생성(se
 **Main Idea**
 1. soft-labeling method : ground-truth answer-span으로부터 ground-truth context label(probability distribution의 형태)를 정하기 위한 벙법임. 
 각 word마다 부여되는 probability는 그 word가 context에 포함될 확률임. answer-span 주위로 window size를 정함. 
-answer-span가 context probability는 1.0임. answer-span으로부터 거리에 따라 probability가 지수적으로 떨어지도록 하는 function을 제시했음.
+answer-span의 context probability는 1.0임. answer-span으로부터 거리에 따라 probability가 지수적으로 떨어지도록 하는 function을 제시했음.
 2. block attention : Transformer Encoder를 거쳐 나온 결과(일반적인 reading comprehension를 구한 값)에다가, context안에 속해있는 position의 word들에게는 그만큼의
  가중치(attention score)를 적용하는 방법임. passage의 모든 word에 대해, 어떤 word가 context의 시작지점일 확률과, 끝지점일 확률을 구함. passage의 첫 단어부터 시작지점
  확률을 cumulate해나가고, 끝 단어부터 끝지점 확률을 cumulate해나감. 두 개를 곱한 값이 cumulate값임. 
