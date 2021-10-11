@@ -4,6 +4,7 @@
 
 **Summary**
 - Multi-Hop Question Answering은 어떤 question에 대답하기 위해서 여러 개의 document을 참조해서 정보를 얻어야 하는 task이다. 이걸 하려면 complex question, supporting documents, answer를 사람이 직접 labeling해놓은 dataset이 필요한데, 이걸 모으는게 너무 costly하다. 그래서 weakly supervised 방법을 쓰고자 한다. End-to-End QA pipeline 중 어떤 component를 weakly supervised 방법으로 학습시킬껀가? QA system은 document retriever, (reranker), reader로 구성되는데, 여기서는 retriever(dense retriever)를 학습시킬 것이다. retriever를 학습시키기 위해 위에서 말한 weakly supervised 방법으로 pre-trained시킨 후, HotPotQA dataset으로 fine-tuning시켰다. 
+- 이 논문은 pre-training시키는 방법을 제시한 논문임.
 
 **Main Idea**
 1. pre-training task : Next Document Prediction
