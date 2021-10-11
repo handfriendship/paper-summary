@@ -80,6 +80,7 @@
 **아직까지 모르는 부분**
 - Future Work에서 걱정하는 copy mechanism은 이미 negative sample로 SC에서 추출한 sample을 포함하기 때문에 괜찮지 않나? negative sample로 발탁되지 않은 utterance중 SC에 속하는 다른 utterance를 attack response로 썼을 때 문제가 된다는 건가?
   - SC에 속하는 negative sample로, SC의 모든 utterance를 concatenate시켜 하나의 neg sample in SC로 구성하면 안되려나?
+  - 이렇게 하면 결국 그 negative sample의 embedding은 context의 embedding과 같아질 것 같음.
 - BM25 이 sparse retriever인 건 알겠는데, 정확히 어떤 원리인지는 모르겠음.
 - autoencoder
 - referenced metric, unreferenced metric, reference sentence 등등.. 에서 reference가 무엇을 나타내는 말인가?
