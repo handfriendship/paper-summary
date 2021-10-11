@@ -60,6 +60,7 @@
   - 단순히 시간 순서대로, 최근의 utterance일수록 더 큰 가중치를 둬서 context에 response를 반영하게 해도 되고, 
   - attention을 써서(Seonwoo et al. 2020)의 Context-aware Answer Extraction in Question Answering처럼 유사도를 학습하게 해도 되고,
   - graph neural network를 써서 (정교민 교수 et al. 2020) Detecting Supporting Sentences for Question Answering via Graph Neural Networks 처럼 supporting sentence의 유사도를 학습하게 한다.
+  - but, 유사도를 학습시키려면 ground-truth resposne가 context의 어느 부분과 얼마만큼 비슷하다는 label이 있어야 할 것 같음.
 
 ## Study
 
