@@ -36,6 +36,7 @@
 
 **질문or향후 연구방향 제시(교수님 랩면접 대비)**
 - Q1. 이 논문에서 제시된 실험은 죄다 LOUVRE랑 기존 연구랑 비교할 때, 기존 pre-trained된 language model을 HotPotQA dataset으로 fine-tuning시키는 것 보다 LOUVRE를 논문에서 제시한 weakly supervised방법으로 pre-trained시킨 후, HotPotQA dataset으로 fine-tuning시키면 더 잘된다! 하는 실험밖에 없는데, 기존 pre-trainined된 language model에다가 논문에서 제시한 방법으로 pre-trainined시킨 후, HotPotQA dataset으로 fine-tuning시키면 더 잘될 것 같은데요?
+    - 본 실험은 LOUVRE라는 pre-training method가 다른 method보다 뛰어난지 보고자 하는 것이므로, 둘 간의 비교를 위해서는 본 실험 구성대로 하나씩 적용해서 테스트하는 것이 맞다.   
 
 - Q2. weakly supervised를 하기 위해 dataset을 만들 때, Document B의 맨 첫 문장에서 Bridge Entity를 지운 채 re-phrasing을 하고, Document B에서도 Bridge Entity(Subatomic particles)를 지운다고 했다. 하지만 Bridge Entity를 지워도 그것이 추출된 document의 문장 내 다른 단어들을 너무 많이 그대로 포함하고 있는데, 이러면 extractive한 정보가 너무 많이 들어가있어 retrieval이 너무 쉽게 되는 문제점을 가지고 있진 않던가요?
     - 1) Document B에서 첫 줄을 전부 삭제 or BERT의 masking기법을 이용하면 어떨까요?
