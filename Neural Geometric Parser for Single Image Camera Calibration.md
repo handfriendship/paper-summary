@@ -3,13 +3,7 @@
 - 2020 ECCV
 
 **Summary**
-- camera calibration을 transformer 구조를 사용하여 해결한 논문이다. 
-- single image를 input으로 사용하고, image에서 semantic cue와 geometric cue를 둘 다 사용하는데, 이 둘을 잘 
-collaborate시켜 사용하기 위해 loss function도 합쳤고, 모델도 end-to-end 형식으로 하나만 사용하였다. line classification, camera intrinsic prediction 둘 다 supervised 이다.
-- camera intrinsics은 global value이므로, input이 여러 local image patch, local line segment로부터 출발하여 모델을 거치며 global feature가 될텐데, 이 과정에서 
-long-term dependency를 유지하도록 하기 위해 Transformer를 사용하였다.
-- geometric cue를 사용하기 위해서 line segment를 classification하는 task를 보조 task로 풀게 하여 loss function에 집어넣고 같이 학습시켰다.
-- line classification task 없이 Transformer만 사용했을 때도 SOTA가 나왔고, line classification 문제를 추가하여 풀게 했더니, 더 좋은 성능이 나왔다.
+
 
 **Main Idea**
 - Intuition:
@@ -40,19 +34,10 @@ cross entropy loss를 쓴다.
   - horizontal line은 VP가 모여있는 것이고, 따라서 가장 먼 곳에 위치해야 하고, 그렇기에 다른 line segment들로부터 가장 멀리 떨어져있어야 되서 이런 방법을 쓰는건가?
 
 **Contributions**
-1. camera intrinsics value는 global한 characteristics를 찾는 과정인데, CNN based model은 local feature를 추출하는 것을 시작으로 점점 global feature를 추출해 나간다. 이 때 long-term dependency가
-를 잘 유지하는게 중요하고, Transformer를 adopt하여 그것을 이루었다. 이렇게 하여 SOTA를 찍었다.
-2. end-to-end model을 만들었고, semantic cue와 geometric cue를 같이 leverage할 수 있다. (기존 related works에는 모델을 두개 만들어 두 정보를 각각 이용하게 하거나, loss function을 따로 뒀다.)
+
 
 **Experiments**
-- Dataset: Google Street View(GSV), SUN360을 사용. (Lee et.al.)가 사용한 curated dataset을 사용하는데, original image의 FoV, pitch, roll을 rectify시켜서 사용하였다.
-- Up Direction, Pitch, Roll, FoV 와 같은 camera intrinsics value는 GT와 predicted value사이의 각도를 비교한다.
-- 여러 기존 모델들과 Up Direction, Pitch, Roll, FoV, AUC를 비교해보았다. SOTA가 나왔다.
-- Horizontal Convergence line, Vertical Convergence line classification task 문제를 
-GSV로 training시키고 SUN360으로 test해보거나, 반대로도 해보았다. accuracy가 괜찮았다. 따라서 robust하다.
-- Line Classification은 qualitative하게 직접 image에 그려서 나타내보았다. make sense하더라.
-- ablation study로 Transformer, vertical convergence line classification task, horizontal convergence line classication task를 빼보고 넣어보았다. vertical task를 넣고 안넣고가 차이가 많이나더라.
-- Decoding 부분의 출력은 전부 같으니, decoder를 1개~6개로 바꿔보았다. decoder를 많이 쌓을수록 성능이 올라갔는데, 성능 향상이 converge하더라.
+
 
 **총평**
 - 
@@ -66,10 +51,44 @@ GSV로 training시키고 SUN360으로 test해보거나, 반대로도 해보았�
 - 읽는데 5:15시간 + 정리하는데 1시간
 
 **알게 된 지식**
--
+- Extrinsic Parameters:
+  - pitch: 카메라를 아래위로 tilt 시키는 것(고개를 끄덕이는 것)(x축 중심 회전)
+  - roll: 고개를 좌우로 갸웃 거리는 것(z축 중심 회전)
+  - yaw: 고개를 도리도리 하는 것(x축 중심 회전)
+
+- pitch 추정 방법:
+  - 직접 측정
+  - vanishing line으로 측정
+  - world coords와 camera coords 간의 변환행렬(translation+rotation)으로부터 추정
+
+- 소실점(Vanishing Point)
+  - 정의: 물리공간에서 평행한 직선들이 2D image에 담기면 한 점에서 만나는 것처럼 보이는데, 그 점이 Vanishing Point
+  - 특징: 같은 평면 위에 있지 않아도 평행하기만 하면 같은 VP를 가짐
+  - 소실점을 이용해 알아낼 수 있는 것:
+    - 카메라의 내부 파라미터(초점거리, principal point)
+    - ...
+  - zenith Vanishing Point: 천정 방향에 있는 VP
+
+- Vanishing Line(소실선):
+  - 정의: 동일 평면에 속한 직선들과, 그 평면에 평행한 평면들에 속한 직선들의 Vanishing Points들은 모두 일직선상에 존재하게 되는데 이 선을 우리는 vanishing line이라고 함.
+  - 기하학적 정의: 어떤 평면(사진 촬영에 대한 대상이 놓여있는 평면)에 대한 소실선(vanishing line)은 이 평면과 수평이고 카메라 원점을 지나는 평면이 이미지 평면과 만나서 생기는 교선이다.
+  - 특징:
+    - 한 image는 여러 개의 vanishing line을 가질 수 있음.
+    - 카메라 광학축(optical axis)에 대한 소실점은 이미지의 주점(principal point)
+  - 소실선을 이용해 알아낼 수 있는 것:
+    - pitch 추정:
+      - 방법: principal point과 vanishing line 사이의 거리 d를 구함. 또, focal length f를 구함. atan2(d, f)가 pitch
+    - roll 추정:
+      - 방법: 소실선 상의 두 점을 잡고 그 직선의 기울기를 구해 atan2()를 통해 각도를 구한다.
+      - vanishing line과 roll과의 관계: 카메라 roll이 일어나면 vanishing line도 그 각도만큼 기운다.
+      - 어떤 image에서 pitch, yaw를 구할 때 camera가 roll되어있든 아니든, vanishing line과 principal point 사이의 거리를 구하면 됨.
+    - yaw 추정:
+      - 방법: principal point에서 vanishing line에 내린 수선의 발과 카메라로 만들 수 있는 직선과, 소실점과 카메라로 만들 수 있는 직선 사이의 각을 yaw라고 두고 구함.
+      - 절대적인 원점 기준을 잡기가 애매함.
+      - 이미지상의 물체의 line segment의 방향과 optical axis의 사잇각을 yaw라고 가정함.
+- 기타:
+  - atan2(y, x): tan^-1(y/x)
 
 **아직까지 모르는 부분**
-- positional encoding이 왜 필요하지? (local patch들도 서로 비슷한 지역의 것들끼리 모여야 하기 때문에, 거기에서 순서가 필요한가?) 
-- line segment 중 512개를 어떻게 추려내는지 그부분 알고리즘은 이해 못했음.
-- Estimating Pseudo Horizontal VPs에서 왜 m_i가 가장 큰 v_i를 두 개 골라서 pseudo horizontal VP를 만드는지 그 이유가 아직 와닿지 않음.
+
 
