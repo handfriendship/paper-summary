@@ -1,6 +1,6 @@
 # paper-summary
 
-- (2021.10) CTRL-C: Camera calibration TRansformer with Line-Classification - [summary](CTRL-C:%20Camera%20calibration%20TRansformer%20with%20Line-Classification.md)
+- (2021.10) CTRL-C: Camera calibration TRansformer with Line-Classification - [summary](CTRL-C: Camera calibration TRansformer with Line-Classification.md)
 - (2021.09) Context-Aware Answer Extraction in Question Answering - [summary](Context-Aware%20Answer%20Extraction%20in%20Question%20Answering.md)
 - (2021.09) Weakly Supervised Pre-Training for Multi-Hop Retriever - [summary](Weakly%20Supervised%20Pre-Training%20for%20Multi-Hop%20Retriever.md)
 - (2021.09) Speaker Sensitive Response Evaluation Model - [summary](Speaker%20Sensitive%20Response%20Evaluation%20Model.md)
