@@ -3,9 +3,41 @@
 - 2020 ECCV
 
 **Summary**
-
+- single image의 horizon line, focal length를 가르쳐주고 학습시키면, horizon line, focal length, camera rotation, up vector(pitch, roll, yaw)를 predict하는 모델을 제시한다. 
+- ZSNet(zenith scoring net), FSNet(frame scoring net)으로 이루어져 있고, 각각은 따로 학습된다.
+- semantic cue(FSNet에서 raw image를 ResNet에 넣어서 씀), geometric cue(line segment)를 둘 다 leverage함.
+- ZSNet은 line segment을 input으로 받아서 zenith VP candidate를 scoring해서 좋은 것만 뽑음. FSNet은 ZSNet의 결과, raw image, line segment를 input으로 받아서 focal length, camera rotation, horizon line을 얻어냄.
+- angle, pitch, roll, FoV, AUC를 계산해 봤을 때 다른 모델보다 성능이 좋았고, test set을 unseen dataset으로 해보았을 때 generalizability도 높았다. Ablation study를 해보니 ZSNet, FSNet의 각 구성요소들은 모두 큰 역할을 하고 있었다.
 
 **Main Idea**
+- ZSNet: 
+  - input: L_z, Z
+    - L_z: line segments를 Eq. (4)를 이용해서 sampling함.
+    - Z: L_z로부터 한 쌍의 line segments를 random하게 sampling해서 교점을 구함.
+  - output: camera rotation, focal length
+  - intuition: line segment로부터 zenith VP candidate를 얻어낼 수 있다.
+  - 목적: zenith VP candidate를 scoring해서 GT와 가까운 zenith VP를 얻어내기 위함.
+  - loss: 
+    1) 각 candidate마다 score(=feature)를 매김. GT zenith를 이용해서 zenith VP candidate의 label을 구함. label=1인 candidate의 score을 전부 더해 loss로 사용함.
+    2) zenith VP candidates의 평균과 GT zenith VP가 같아지도록 한다. 평균을 구할 때, 각 candidate는 그것의 score(=feature)의 크기만큼을 가중치로 주어 weighted avg를 구한다.
+  - 과정:
+    1) Z를 PointNet feature extractor를 이용해서 embedding함.
+    2) L_z를 PointNet feature extractor를 이용해서 embedding함. 이후, global max-pooling해서 global feature를 뽑아냄.
+    3) 1)결과와 2)결과를 concatenate함.
+    4) MLP layer에 집어넣고, sigmoid에 넣어서 0~1 사이의 score를 산출한다.
+
+- FSNet:
+  - input: ZSNet output(zenith VP candidate), line segment
+  - output: horizontal line, focal length / (manhattan world assumption) camera rotation, focal length
+  - intuition: prior knowledge가 사용됨.
+  - 목적:
+  - loss: cross entropy loss. label은 (각 candidate의) s_vh_i를 step function을 이용해서 label로 바꿔서 사용함. value는 (각 candidate의) manhattan directions를 FSNet에 넣어서 나온 결과를 사용함.
+    - s_vh_i: s_h_i, s_v_i를 평균냄
+      - 1) s_h_i: horizon candidate이 GT와 비슷한 정도
+      - 2) s_v_i: zenith VP candidate이 GT와 비슷한 정도
+  - 과정:
+
+
 - Intuition:
   - Transformer를 사용하게된 intuition: Contribution 1.에서 설명함.
   - line classification task를 같이 풀게 한 intuition: geometric cue를 함께 사용하게 하기 위함. 기존에도 geometric cue를 사용하게 하기 위해 line classification task를 풀게 했음.
@@ -37,6 +69,9 @@ cross entropy loss를 쓴다.
 
 
 **Experiments**
+- Datasets: Google Street View, HLW
+  - Google Street View: GT Horizon Line, GT focal length
+  - HLW: GT Horizon Line
 
 
 **총평**
@@ -48,7 +83,7 @@ cross entropy loss를 쓴다.
 ## Study
 
 **읽는데 걸린 시간**
-- 읽는데 5:15시간 + 정리하는데 1시간
+- 읽는데 11:30 + 정리하는데 1시간
 
 **알게 된 지식**
 - Extrinsic Parameters:
@@ -90,5 +125,7 @@ cross entropy loss를 쓴다.
   - atan2(y, x): tan^-1(y/x)
 
 **아직까지 모르는 부분**
-
+- Q1. (p9) s_vh_i가 뭔지 모르겠다.
+- Q2. (p9) s_vh_i를 구할 때 i가 무엇인가? i가 각 candidate의 index라면, s_h_i와 s_v_i에서 각 i를 어떻게 sampling하나?
+- Q3. (p9) manhattan directions를 의미하는 R_i에서 i가 무엇을 의미하는지 모르겠다.
 
