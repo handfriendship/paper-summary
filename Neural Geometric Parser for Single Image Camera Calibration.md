@@ -54,7 +54,7 @@ cross entropy loss를 쓴다.
 - Extrinsic Parameters:
   - pitch: 카메라를 아래위로 tilt 시키는 것(고개를 끄덕이는 것)(x축 중심 회전)
   - roll: 고개를 좌우로 갸웃 거리는 것(z축 중심 회전)
-  - yaw: 고개를 도리도리 하는 것(x축 중심 회전)
+  - yaw: 고개를 도리도리 하는 것(y축 중심 회전)
 
 - pitch 추정 방법:
   - 직접 측정
