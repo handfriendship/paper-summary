@@ -27,51 +27,53 @@
     4) MLP layer에 집어넣고, sigmoid에 넣어서 0~1 사이의 score를 산출한다.
 
 - FSNet:
-  - input: ZSNet output(zenith VP candidate), line segment
+  - input: 1)raw image(backboned with ResNet) 2)binary line segment map 3)3 activation maps 4)Mahnattan directions 5)estimated focal length
+    - (이 모든 정보는 ZSNet output(zenith VP candidate), line segment를 통해 얻어짐)
   - output: horizontal line, focal length / (manhattan world assumption) camera rotation, focal length
-  - intuition: prior knowledge가 사용됨.
-  - 목적:
-  - loss: cross entropy loss. label은 (각 candidate의) s_vh_i를 step function을 이용해서 label로 바꿔서 사용함. value는 (각 candidate의) manhattan directions를 FSNet에 넣어서 나온 결과를 사용함.
+  - intuition: 
+    - 우리는 zenith VP, horizon line을 찾아야 하는데, horizon line을 찾기가 어렵다. 왜냐면 horizontal line segment는 horizon line방향이 아니더라도, 결국 horizon line에 있는 VP로 vanishing하기 때문.
+    - 그래서 우리는 manhattan world assumption 하에 man-made scene의 특징을 이용할 것이다.
+    - man-made scene은 rectangle을 많이 포함하고 있고, 이 rectangle을 둘러싸고 있는 line segment는 각각 vertical line, horizon line 방향일 확률이 높다.
+    - 우리가 ZSNet으로부터 zenith VP는 scoring을 했으니깐, 현재 rectangle중에서 zenith VP와 방향이 비슷한 line segment를 갖고 있는 rectangle의 horizontal line segment를 구한다.
+    - 이것을 이후에 어케어케 잘 sampling해서 horizontal VP candidate으로 쓰고, FSNet의 input으로 넣어서 scoring한다.
+  - 목적: manhattan directions(zenith VP candidate, horizontal line candidate)를 scoring하기 위함.
+    - scoring한 결과를 통해 최종 focal length, zenith VP를 산출함.
+  - loss: cross entropy loss. FSNet이 predict한 manhattan directions가 GT와 같아지도록 학습시킴.
+    - zenith VP는 점으로 비교하고, horizontal VPs는 그것을 line으로 만들어서 GT horizon line과 비교함.
+    - GT horizon line과 비교할 때는 left, right border와의 교점을 만들어서 그것이 얼마나 차이나는지를 비교함.(CTRL-C와 같은 방법)
+    - label은 (각 candidate의) s_vh_i를 step function을 이용해서 label로 바꿔서 사용함. value는 (각 candidate의) manhattan directions를 FSNet에 넣어서 나온 결과를 사용함.
     - s_vh_i: s_h_i, s_v_i를 평균냄
       - 1) s_h_i: horizon candidate이 GT와 비슷한 정도
       - 2) s_v_i: zenith VP candidate이 GT와 비슷한 정도
   - 과정:
-
-
-- Intuition:
-  - Transformer를 사용하게된 intuition: Contribution 1.에서 설명함.
-  - line classification task를 같이 풀게 한 intuition: geometric cue를 함께 사용하게 하기 위함. 기존에도 geometric cue를 사용하게 하기 위해 line classification task를 풀게 했음.
-
-- 모델 Structure:
-  1. raw input image의 backbone으로 resnet50을 사용함.
-  2. positional encoding을 하여 transformer encoder의 input으로 넣음.
-  3. encoder를 6개 쌓음.
-  4. decoder의 입력으로는 1)encoder의 출력, 2)line segment, 3)intrinsic query 이렇게 3개가 들어감.
-    4-1) 3.의 출력을 입력으로 씀.
-    4-2) line segment를 LSD 알고리즘을 이용해 추출한다. 거기에서 512개를 추출한다.
-    4-3) intrinsic query 3개를 embedding한다.
-  5. decoder를 6개 쌓음.
-  6. loss function은 line classification task의 loss와 camera intrinsic prediction loss를 같이 쓴다. 
-    6-1) VP(Vanishing Point)의 경우, GT(Ground Truth)-VP의 embedding과 predicted-VP의 embedding의 cosine distance를 loss로 쓴다. horizon line의 경우, image의 left boundary, right boundary와
-각각 교점을 만든다. left 교점과 right 교점 중 각각의 GT와의 차이가 큰 것을 고른다. 그리고 GT-교점과 predicted-교점의 차이를 loss로 쓴다. FoV의 경우, GT-FoV와 predicted-FoV의 차이를 loss로 쓴다.
-    6-2) line classification의 경우, 4-2)의 결과인 512개의 line segment들을 vertical convergence, horizonal convergence, none of them 중 하나로 분류할 수 있는데, 이 3가지 카테고리로 softmax한 후,
-cross entropy loss를 쓴다.
-
-- Estimating Pseudo Horizontal VPs
-  - dataset에는 zenith VP는 있는데 Horizontal VP는 없다. 따라서 레이블을 적절히 만들어줘야 한다.
-  - L_in^i는 ith VP candidate인 v_i를 포함하여 만들 수 있는 모든 line segment의 집합이다.
-  - m_i는 L_in^i의 모든 원소의 길이를 다 합한 것이다.
-  - m_i가 가장 클 때의 v_i를 고르고, L_in에서 L_in^i를 뺀 다음, 다시 가장 큰 m_i에 대한 v_i를 고른다. 
-  - 이 두 v_i를 이어서 pseudo horizontal VP를 고른다.
-  - horizontal line은 VP가 모여있는 것이고, 따라서 가장 먼 곳에 위치해야 하고, 그렇기에 다른 line segment들로부터 가장 멀리 떨어져있어야 되서 이런 방법을 쓰는건가?
+    1) horizontal VP candidates를 찾음
+      - horizontal line segments와 pseudo-horizon과의 intersections를 구함.
+        - pseudo-horizon은 zenith representative를 통해서 구함.
+        - zenith representative는 모든 zenith VP candidates의 weighted avg해서 structure tensor로 바꾼 다음, largest eigenvector를 구해서 구함.
+      - zenith representative과 image center를 잇는 선을 pivot으로, intersections를 두 group으로 분류함.
+      - 두 group에서 random하게 하나씩 뽑아서 horizontal direction line을 만듦.
+    2) binary line segment map을 구함. (line segment가 있는 pixel은 1, 아니면 0)
+    3) 3 activation maps를 구함. (line segment 중 vanishing line과 가까운 것에 가중치를 둠. 가깝다는 말은 각도가 가깝다는 말임.)
+    4) Manhattan directions를 sampling함. (잘 모르겠다.)
+    5) estimated focal length를 넣음. (zenith VP 1개, horizontal VP를 1개 sampling해서, 두 점을 Eq. (1)에 넣고 풀어서 구한다고 함.)
+    6) 1)~5)를 전부 concatenate(channel에 추가하는 식으로)시켜 FSNet의 input으로 넣고, 위에서 설명한 loss로 학습시킴.
+    7) 6)이 끝나면 모델은 zenith VP candidate, horizontal line candidate를 scoring함. line segments들이 manhattan world assumption과 얼마나 일치하는지에 대한 정도를 weight로 반영하여 최종 focal length, zenith VP를 구함.
+    8) 최종 focal length를 Eq. (1)를 사용해서 pitch, roll, yaw를 유도할 수 있음.
+    9) pitch, roll, yaw를 통해서 camera rotation을 유도할 수 있는 듯?
 
 **Contributions**
-
+- SOTA가 나왔다.
+- manhattan world assumption 상의 특징을 잘 이용해서 horizontal line segment를 추려내고, horizon line을 구했다.
 
 **Experiments**
 - Datasets: Google Street View, HLW
   - Google Street View: GT Horizon Line, GT focal length
   - HLW: GT Horizon Line
+- 6개의 모델들과 비교했더니 SOTA가 나왔다. 공정한 비교를 위해 모델에 따라, backbone으로 ResNet을 넣어주거나, 몇몇 parameter를 predict하지 않을 경우, GT를 넣어주거나 했다.
+- Google Street View로 학습시키고 HLW로 test하거나, HLW로 학습시키고 Google Street View로 test하며 generalizability를 test했을 때도, 우리 모델이 젤 잘했다.
+- 정성적 비교(직접 sample image에 plot)를 해봤을 때도 make sense했다.
+- ZSNet의 성능만 비교해서 zenith VP를 예측하는 싸움을 했을 때도, 다른 모델보다 본 모델이 더 잘했다.
+- Ablation Study로 모델의 구성요소들을 한 부분씩 차례대로 빼봤는데, 모든 구성요소들이 전부 큰 의미를 갖고 기여하고 있었다.
 
 
 **총평**
@@ -83,7 +85,8 @@ cross entropy loss를 쓴다.
 ## Study
 
 **읽는데 걸린 시간**
-- 읽는데 11:30 + 정리하는데 1시간
+- 읽는데 11:30 + 정리하는데 3시간
+- pages: 14 (without references, appendix)
 
 **알게 된 지식**
 - Extrinsic Parameters:
@@ -128,4 +131,5 @@ cross entropy loss를 쓴다.
 - Q1. (p9) s_vh_i가 뭔지 모르겠다.
 - Q2. (p9) s_vh_i를 구할 때 i가 무엇인가? i가 각 candidate의 index라면, s_h_i와 s_v_i에서 각 i를 어떻게 sampling하나?
 - Q3. (p9) manhattan directions를 의미하는 R_i에서 i가 무엇을 의미하는지 모르겠다.
-
+- Q4. (p8) manhattan directions를 어떻게 2개의 VPs를 sampling해서 구한다는 것인지 모르겠다.
+- Q5. (p8) 구한 manhattan directions는 image당 3개(zenith, both horizontal VPs)를 말하는거겟지? 모든 pixel의 자리에 같은 값이 들어가겠지? 그래서 channel(각 directions당 3개, 직선을 표현하려면 3개의 값이 필요하므로)이 총 9개가 필요한 거겠지?
