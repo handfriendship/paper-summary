@@ -15,7 +15,10 @@
     - L_z: line segments를 Eq. (4)를 이용해서 sampling함.
     - Z: L_z로부터 한 쌍의 line segments를 random하게 sampling해서 교점을 구함.
   - output: camera rotation, focal length
-  - intuition: line segment로부터 zenith VP candidate를 얻어낼 수 있다.
+  - intuition: 
+    - PointNet은 point들의 local feature + global feature를 concatenate해서 사용하면 point를 더 잘 scoring할 수 있다는 것이다.
+    - 우리는 global feature를 추출할 때 point의 global feature대신 geometric cue(line segment)의 global feature를 사용하자.!
+    - 사용할 line segment들은 zenith VP쪽을 향하고 있는 걸로 잘 thresholding해서 추려내자.
   - 목적: zenith VP candidate를 scoring해서 GT와 가까운 zenith VP를 얻어내기 위함.
   - loss: 
     1) 각 candidate마다 score(=feature)를 매김. GT zenith를 이용해서 zenith VP candidate의 label을 구함. label=1인 candidate의 score을 전부 더해 loss로 사용함.
@@ -80,7 +83,7 @@
 - 
 
 **질문or향후 연구방향 제시(교수님 랩면접 대비)**
-- 
+- 사람이 하는 것처럼 적은 수의 geometric cue만으로도 camera calibration을 하는 방법을 연구해보겠다.
 
 ## Study
 
