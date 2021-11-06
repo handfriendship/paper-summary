@@ -36,7 +36,7 @@
 - Evaluation metric에는 Pearson상관계수, Spearman 상관계수를 사용함.
 - 770K의 dataset 중, 300개의 conversation, 300개의 ground-truth를 추출함. 각 conversation마다 3개의 conversation model을 사용해서 response를 1개씩 총 3개 생성함. 
 총 1200개의 response를 사람을 고용해서 Human annotated score를 얻음. SSREM이 평가한 게 human annotated score와 얼마나 correlate한지 봄.
-- 실험할 때에는 sentence-level embedding방법을 baseline에서 썼듯이, embedding vector를 avg하는 방법을 사용함.
+- 실험할 때에는 sentence-level embedding방법을, baseline에서 쓴 방법과 동일한 방법인 embedding vector를 avg하는 방법을 사용함.
 1. SSREM이 ground-truth, 4종류의 negative sample을 평가한 결과가 human annotated score의 분포와 얼마나 correlate한지 봄. SSREM이 가장 correlate하게 예측
 2. SSREM이 ground-truth과 negative sample을 얼마나 잘 구별하는지 봄. SSREM이 가장 큰 similarity gap으로 구별함.
 3. 아까까지는 Twitter conversation에서 test dataset을 썼는데, 새로운 domain의 dataset(Movie script)에서의 성능이 어떤지 봄. SSREM이 젤 잘함.
