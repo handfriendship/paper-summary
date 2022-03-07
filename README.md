@@ -1,5 +1,6 @@
 # paper-summary
 
+- (2022.03) AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE - [summary](AN%20IMAGE%20IS%20WORTH%2016X16%20WORDS:%20TRANSFORMERS%20FOR%20IMAGE%20RECOGNITION%20AT%20SCALE.md)
 - (2022.02) Recursive Deep Models for Semantic Compositionality Over a Sentiment Treebank - [summary](Recursive%20Deep%20Models%20for%20Semantic%20Compositionality%20Over%20a%20Sentiment%20Treebank.md)
 - (2021.10) Neural Geometric Parser for Single Image Camera Calibration - [summary](Neural%20Geometric%20Parser%20for%20Single%20Image%20Camera%20Calibration.md)
 - (2021.10) CTRL-C: Camera calibration TRansformer with Line-Classification - [summary](https://github.com/handfriendship/paper-summary/blob/master/CTRL-C:%20Camera%20calibration%20TRansformer%20with%20Line-Classification.md)
