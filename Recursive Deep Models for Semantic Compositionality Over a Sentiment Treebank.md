@@ -1,4 +1,4 @@
-# Neural Geometric Parser for Single Image Camera Calibration
+# Recursive Deep Models for Semantic Compositionality Over a Sentiment Treebank
 - Author : Richard Socher, Alex Perelygin, Jean Y. Wu, Jason Chuang, Christopher D. Manning, Andrew Y. Ng and Christopher Potts
 - 2013 EMNLP
 
