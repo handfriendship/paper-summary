@@ -9,3 +9,9 @@
 - (2021.09) Speaker Sensitive Response Evaluation Model - [summary](Speaker%20Sensitive%20Response%20Evaluation%20Model.md)
 - (2021.09) Variational Hierarchical User-based Conversation Model - [summary](Variational%20Hierarchical%20User-based%20Conversation%20Model.md)
 - (2021.09) Reducing Annotation Artifacts in Crowdsourcing Datasets for Natural Language Processing - [summary](Reducing%20Annotation%20Artifacts%20in%20Crowdsourcing%20Datasets%20for%20Natural%20Language%20Processing.md)
+
+
+# papers to be summarized
+1. ViT
+2. Shankar, Vaishaal, et al. "Evaluating Machine Accuracy on ImageNet." , ICML 2020
+3. Taskonomy
