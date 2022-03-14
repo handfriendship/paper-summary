@@ -24,7 +24,7 @@
   - batch size는 밑에 실험에서 찾았던 8K로 뒀음.
   - 500K까지 늘렸음에도 아직도 saturate되지 않았고, 더 길게 학습시키면 성능 향상이 더 있을 것이라고 주장함.
 - 더 큰 배치사이즈
-  - # of passes (training iteration)은 동일하게 둔 채로 batch size를 늘려봄.
+  - \# of passes (training iteration)은 동일하게 둔 채로 batch size를 늘려봄.
   - (batch_size, steps)를 (256, 1M), (2K, 125K), (8K, 31K)로 실험해봄. 
   - (2K, 125K)일 때가 가장 좋았음.
   - 하지만 향후 다른 실험에서는 (8K, 31K)를 사용함. 이유는 batch size가 커질수록 분산 병렬 학습이 더 쉬워진대. (gradient accumulation 때문에)
