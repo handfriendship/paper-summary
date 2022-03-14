@@ -12,53 +12,85 @@
 - 
 
 **Main Idea**
-- 데이터셋 설계: 
-  - RottenTomatoes의 영화평론 데이터셋에 phrase-level로 감성라벨을 붙였다.
-    - 원래는 7-level(very positive, positive, somewhat positive, neutral, ...) 로 구분했는데, very positive과 positive를 합쳤다.
-    - Amazon Mechanical Turk 3명을 고용해서 labeling했다.
-    - 총 문장 개수는 11,855개 (RottenTomatoes의 개수와 같음), 총 태깅된 phrase개수는 215,154개.
-  - 데이터셋 distribution
-    - 5개의 label은 uniformly distributed되어있다.
-    - n-gram이 낮을수록 neutral이 많고, n-gram이 높을수록 uniformly distributed되어있다.
-- RNTN: 
-    - 하나의 tensor를 이용한다는 것 같다.
-    - 읽지 않아서 모르겠다.
+- BERT가 만들어질 때 사용됬던 여러가지 setting들을 바꿔봄.
+- 내가 생각하는 중요도 순서로 나열
+- 더 큰 데이터셋
+  - BERT는 16GB의 dataset을 사용. RoBERTa는 160GB의 dataset을 사용.
+  - (기존) BookCorpus, Wikipedia + (추가) CC-NEWS, OpenWebText, Stories
+  - training iteration은 동일하게 두고 dataset만 늘렸을 때도 성능 향상.
+- 더 오래동안 학습
+  - 기존에 100K step동안 학습시켰던 것을 300K, 500K로 늘려서 학습시킴.
+  - step size를 늘릴수록 성능 향상.
+  - batch size는 밑에 실험에서 찾았던 8K로 뒀음.
+  - 500K까지 늘렸음에도 아직도 saturate되지 않았고, 더 길게 학습시키면 성능 향상이 더 있을 것이라고 주장함.
+- 더 큰 배치사이즈
+  - # of passes (training iteration)은 동일하게 둔 채로 batch size를 늘려봄.
+  - (batch_size, steps)를 (256, 1M), (2K, 125K), (8K, 31K)로 실험해봄. 
+  - (2K, 125K)일 때가 가장 좋았음.
+  - 하지만 향후 다른 실험에서는 (8K, 31K)를 사용함. 이유는 batch size가 커질수록 분산 병렬 학습이 더 쉬워진대. (gradient accumulation 때문에)
+- Input format & NSP loss
+  - NSP loss가 꼭 필요한지 의문을 제기하여 빼봄.
+  - input format을 4가지 유형으로 실험함.
+  - (1) Segment pair: 기존 BERT가 쓰던 유형. 2개의 segment를 [SEP]토큰을 사이에 두고 이어붙인 후, 같은 document에서 왔는지를 맞추는 것. 각 segment는 하나 이상의 문장일 수 있음.
+  - (2) Sentence pair: 각 segment는 하나의 문장으로 이루어짐.
+  - (3) Full sentence: NSP loss를 없앰. input을 최대한 512에 가깝게 만듦. 한 doucment에서 sequence를 가져오는데, 만약 document가 중간에 끝나버리면, [SEP]토큰을 두고 다른 document에서 sequence를 마저 가져옴.
+  - (4) Doc sentence: NSP loss를 없앰. input을 최대한 512에 가깝게 만듦. 한 docuent에서만 sequence를 가져옴. 만약 document가 중간에 끝나버리면 끝난대로 짧은 input을 씀.
+  - 4번 결과가 가장 좋았음. 그래도 다른 model과의 비교를 위해 3번을 사용.
+- Dynamic masking
+  - 기존 BERT는 preprocessing time에 미리 masking을 해둠.
+  - input 하나당 문장을 10가지 다른 유형으로 masking함.
+  - 40 epoch동안 학습됨.
+  - RoBERTa에서는 매번 다른 방식으로 dynamically하게 masking을 함.
+  - dynamic masking이 더 좋은 성능을 보임.
+- Text Encoding Method
+  - 기존에는 character-level BPE가 사용됨.
+  - 하지만 이것은 단일 character가 너무 많은 size를 차지한다는 문제가 있음.
+  - GPT2에서 소개된 byte-level BPE는 size가 적당하면서도 많은 subword를 잘 표현한다고 생각했음.
+  - 이거 때문에 base 모델의 경우 15M, large모델의 경우 20M개의 parameter가 더 사용됨.
+  - byte-level BPE의 성능이 약간 안좋았다는데, 향후 실험에서는 이것을 씀.
+- 기타 hyperparameter setting
+  - Adam의 beta value, epsilon
+  - weight decay
+  - learning rate, warm-up step
+  - dropout
 
 **Contributions**
-- summary에서 설명함.
+- 더 많은 데이터, 더 오래 학습, masking 기법, 더 큰 batch size, NSP loss를 없앰, pretraining시 input format을 바꿈, byte-level BPE, 기타 여러 hyperparameter 수정 했더니 성능이 올랐다.
+- dataset, training strategy와 같은 mundane한 요소들도 중요하다는 question을 던졌다.
 
 **Experiments**
-- 용어정리
-  - negation: but, although 등으로 문장의 sentiment가 반전되는 것
-- Fine-grained Sentiment For All Phrases
-  - 낮은 n-gram을 맞추는 성능은 높고, 높은 n-gram을 맞추는 성능은 낮다.
-  - 기존 bag-of-words방법론은 낮은 n-gram에선 약하고, 높은 n-gram(negation이 많아지는)에선 강하다. (아마 bag-of-words가 문장의 전체적인 통계 정보를 보는 방법이라 그런듯?)
-- Negating Positive Sentences
-  - positive sentence를 골라서 일부로 negate시킨 것. (positive -> negative로 바뀜)
-  - RNTN이 젤 잘되더라.
-- Negating Negative Sentences
-  - negative sentence를 골라서 negate시킨 것. 
-  - 'The movie was not terrible'
-  - negative -> 덜 negative
-  - RNTN이 젤 잘되더라.
-  - Figure 8.: negate를 시켰을 때 어떤 문장의 감성 분류 결과의 positive속성 또는 negative속성이 바뀌는 정도
+- GLUE
+  - multi-task fine-tuning을 하지 않고, 평가할 downstream task을 대상으로 single-task fine-tuning만 수행함.
+  - 성능이 잘나옴.
+- SQuAD
+  - 다른 model(e.g. XLNet)은 다른 QA dataset을 가져와서 downstream task를 풀 때 사용했는데, 우리는 SQuAD만 사용힘.
+  - 성능이 잘나옴.
+  - XLNet을 기반으로 한 어떤 sota모델 하나는 못이겼음.
+- RACE
+  - 데이터셋 설명: 중국의 중,고등학생이 푸는 영어 독해 4지 선다 문제.
+  - 각 4지 선다 보기를 (question+passage, candidate)로 묶음.
+  - RoBERTa를 4개 두고, 각 4지 선다 보기에 대한 [CLS] representation을 구함.
+  - 4개의 [CLS] representation을 FC-layer에 넣어서 최종 답을 고름.
+  - 성능이 잘나옴.
 
 **총평**
-
+- 실제 Kaggle이나 Project를 할 때 BERT를 사용할 일이 많을 것이다. 그 때 어떤 요소나 hyperparameter가 BERT의 성능 향상에 영향을 미치는지 알 수 있었다.
 
 ## Study
 
 **읽는데 걸린 시간**
-- 읽는데 8:00 + 정리하는데 30분
-- pages: 9 (without references&appendix)
+- 읽는데 ?:00 + 정리하는데 1시간
+- pages: 9
 
 **비판적 사고**
-- Vanilla Transformer를 그대로 가져왔다는 것이 이 논문의 contribution이다.
-  - Figure 1에서 소개된 Transformer Encoder는 Layer Norm의 위치가 변경되었는데, 왜 그렇게 했는지에 대한 설명이 있으면 좋겠다.
-- Table 2에서 ViT-H/14, ViT-L/16 두가지 모델의 성능이 비교되었다.
-  - Large->Huge, 16x16->14x14로 동시에 바꾸어서 무엇이 더 많은 영향을 미쳤는지 알기가 애매하다.(it is not clear ~ )
-- 4.5에서 현재의 trainable embedding layer가 학습을 통해 sinusoidal structure를 배우기 때문에 따로 2D embedding을 주입해주는 것이 도움이 되지 않았다고 나와있다.
-  - 현재 모델(transformer)은 inductive bias가 부족하기 때문에 transfer를 할 때 크기가 작은 dataset을 사용하면 따로 2D embedding을 사용하는 것이 도움이 된다고 유추할 수 있는데, 이것에 대한 실험이 있으면 더 좋을 듯 하다.
+- Q1. development set accuracy를 산출하는 것이 공정성에 문제가 없는가? (튜닝 횟수에 따라서 dev set에 과적합할 위험이 있지 않나?) dev-set으로 평가를 했다는게 무슨 의미인지 모르겠다.
+- Q2. batch size를 2K로 두는 것이 더 좋은데, 8K로 둬도 되는 것인가?
+- Q3. byte-level BPE를 최종적으로 쓴 것 같은데, 성능이 안나왔는데도 써도 되나?
+- Q4. XLNet은 8K 125K 정도인데, 비슷한 # of passes를 가진 RoBERTa와 비교했을 때는 XLNet이 더 좋긴 함. 
 
 **이해못한 점**
-- attention distance가 정확히 무엇을 의미하는지 잘 모르겠다. Figure 6을 기반으로 유추하면 attention weight가 큰 것은 attention distance가 가깝다는 말인데, 어짜피 attention weight의 sum은 1이기 때문에 Figure 7의 y축인 Mean attention distance를 구하면 layer에 상관없이 모두 같은 값을 가져야하는 것 아닌가?
+- GLUE의 QNLI 실험 셋팅, GLUE의 WNLI 실험 셋팅.
+- gradient accumulation
+- GPT2 byte-level BPE
+- ensemble model이 뭐지?
+- byte-level BPE를 쓰는 것이 BERT-base와 BERT-large에서의 차이를 일으키는 이유?
