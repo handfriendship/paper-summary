@@ -18,7 +18,8 @@
 4. ViLT
 5. this week session1 (읽으면서 여기다가도 바로바로 정리하기)
 6. this week session2 (읽으면서 여기다가도 바로바로 정리하기)
-7. XLNet
-8. XLM
-9. Taskonomy
-10. 
+7. 성재선배 논문 정리하기
+8. XLNet
+9. XLM
+10. Taskonomy
+11. 
