@@ -59,7 +59,11 @@ data-to-data relation을 사용하는 방법으로는 여러가지가 있겠지�
 - pages: 9.5 (without references&appendix)
 
 **비판적 사고**
-- 
+- 어떤 class의 image를 생성할 때, 다양한 image를 생성하지 못하는 문제가 발생할 수 있다.(mode collapse문제.) 현재의 discriminator는 generator와는 독립적으로 2C-loss를 줄이도록 학습한다. 이것은 class내의 diversity를 줄여서 entropy를 낮추도록 학습하므로 diversity문제를 일으킬 수 있다.
+- 현재는 batch내의 각 sample을 기준으로 class embedding 및 같은 label을 공유하는 sample들에 대한 cosine거리를 가깝게하도록 설계되어있다. 
+하지만 Comparison with APS에서, class embedding이 anchor역할을 하기 때문에 2C-loss만 단독으로 사용하는 것이 더 좋다고 했다.
+그러면 loss를 만들 때, batch내의 각 sample을 기준으로 하지 말고, batch내에 존재하는 class embedding을 기준으로, 해당 class에 해당하는 모든 sample들의 cosine거리를 가깝게 하는 식의 loss를 만들면 안되나?
+- 2C-loss + CR 조합이 시너지 효과를 일으키는 것을 단순 실험으로만 보였는데, 이에 대한 설명이 있으면 좋겠다.
 
 **이해못한 점**
 - 2C-loss + positive sample augmentation을 했을 때 왜 더 나쁜지에 대한 저자의 speculation을 이해하지 못함.
