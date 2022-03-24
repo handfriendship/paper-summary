@@ -53,10 +53,21 @@
 - 3. IIC를 이용한 image segmentation
   - idea: 
     - image clustering에서는 transform시킨 pair와 common한 부분을 찾도록 학습되었음. 
-    - segmentation에서는 
+    - segmentation에서는 transform시킨 pair와의 common한 부분 뿐만 아니라, 주변 patch들과의 common한 부분도 같이 찾도록 학습되었음.
   - 과정:
-  - input image를 patch로 자름.
-  - 
+    - input에 대해 transform pair를 만듦.
+    - input과 pair를 patch로 자름.
+    - 각 patch들에 대해 joint probability matrix P를 구함.
+    - 이 P를 어떤 threshold내에서 정의한 patch의 모든 이동에 대해서 구한 후 평균낸 값을 저장한 matrix를 구함.
+    - mutual information 수식에 집어넣음.
+- 4. 학습방법
+  - 4.1 unsupervised
+    - 위에서 설명함.
+  - 4.2 semi-supervised overclustering
+    - overclustering을 한 뒤에 training set label을 가지고 real cluster로 many-to-one mapping을 함.
+    - mapping과정에서 parameter update는 일어나지 않음.
+  - 4.3 semi-supervised fine-tuning
+    - semi-supervised overclustering network를 가져와서 overclustering head를 real head로 갈아끼운 후 training set label로 supervised fine-tuning시킴.
 
 **Contributions**
 - IIC loss를 제시함.
@@ -65,15 +76,12 @@
 - image clustering, segmentation에서 sota를 아주 높은 gap으로 outperform함.
 
 **Experiments**
-- CIFAR10, Tiny ImageNet, ImageNet에 대해서 previous sota 모델들과 성능비교를 함. 이 중 Tiny ImageNet, ImageNet에서 FID를 기준으로 유의미한 성능 향상이 있었음.(new sota달성)
-- ProjGAN과 ContraGAN의 overfitting 정도를 비교함.(training set과 validation set의 accuracy gap을 기준으로, 얼마나 빨리 overfitting되는지를 봄.)
-- ProjGAN과 ContraGAN이 얼마나 빨리 training collapse에 도달하는지 비교함.
-- ProjGAN과 ContraGAN이 얼마나 training이 stability한지를 비교함.(spectral norm을 기준으로)
-- ablation study를 수행함.
-  - batch size를 다르게 했을 때의 변화를 관측함. (batch가 클수록 잘된다.)
-  - loss를 바꿔보면서 2C-loss가 가장 좋다는 것을 보임.
-  - 2C-loss를 단독으로 사용했을 때와 2C-loss + positive sample를 augmentation을 했을 때를 비교해서 2C-loss의 단독 사용이 더 좋음을 보임.
-  - 2C-loss + CR(Consistency Regularization)를 같이 사용했을 때 시너지를 냄을 보임. (둘 중 하나라도 빼게 되면 성능이 떨어짐을 보임.)
+- 4가지 ablation study를 함. 
+  - no auxiliary overclustering
+  - sub-head를 하나만 사용했을 때 (원래는 5개 사용함.)
+  - batch 내에 여러 transformation을 적용한 pair를 두는데, 그걸 하나로 줄여봄.
+  - distractor cluster에 속한 sample을 이용하지 않았을 때
+- semi-supervised clustering
 
 **총평**
 - 
@@ -81,19 +89,18 @@
 ## Study
 
 **읽는데 걸린 시간**
-- 읽는데 4:30 + 정리하는데 1:10분
-- pages: 9.5 (without references&appendix)
+- 읽는데 4:30 + 정리하는데 2:05분
+- pages: 8 (without references&appendix)
 
 **비판적 사고**
-- 어떤 class의 image를 생성할 때, 다양한 image를 생성하지 못하는 문제가 발생할 수 있다.(mode collapse문제.) 현재의 discriminator는 generator와는 독립적으로 2C-loss를 줄이도록 학습한다. 이것은 class내의 diversity를 줄여서 entropy를 낮추도록 학습하므로 diversity문제를 일으킬 수 있다.
-- 현재는 batch내의 각 sample을 기준으로 class embedding 및 같은 label을 공유하는 sample들에 대한 cosine거리를 가깝게하도록 설계되어있다. 
-하지만 Comparison with APS에서, class embedding이 anchor역할을 하기 때문에 2C-loss만 단독으로 사용하는 것이 더 좋다고 했다.
-그러면 loss를 만들 때, batch내의 각 sample을 기준으로 하지 말고, batch내에 존재하는 class embedding을 기준으로, 해당 class에 해당하는 모든 sample들의 cosine거리를 가깝게 하는 식의 loss를 만들면 안되나?
-- 2C-loss + CR 조합이 시너지 효과를 일으키는 것을 단순 실험으로만 보였는데, 이에 대한 설명이 있으면 좋겠다.
+- 최적의 data transformation이 무엇인지 생각하지 않고, 좋다고 알려진 무작위 data transformation을 random하게 pick해서 사용하고 있다. 
+  - SimCLR 연구에서는 data transformation이 중요하다고 강조하면서 brute-force 실험을 통해 어떤 transformation의 조합이 가장 좋은지를 찾으려고 한다.
+  - 이 연구(IIC)에서는 좋다고 알려진 것을 단순히 쓰고 있는데, 이것은 같은 비전 분야 안에서도 각 task에서 조명하고자 하는 특징과 cue에 따라 달라질 수 있다.
+  - 더 나아가서, segmentation에서는 computation issue때문에 h=1, r=1로 둬서 transform pair를 하나만 두도록 했는데, 그럴수록 더 좋은 transform이 무엇인지 찾는 것이 중요하다.
+- IIC loss가 skewed된 distribution을 가지고 있는 dataset에 대해서도 잘 동작할지 궁금하다.
+  - IIC objective는 mutual information을 최대화하는데, 이거는 H(z)를 최대화하는 방식으로 동작하기 때문이다. 
+  - H(z)의 의미는 model이 모든 cluster를 equal하게 pick하도록 만드는 것이다.
+  - 만약 분포가 한 cluster로 치우쳐진 dataset을 학습하게 될 때에는 이것이 독이 될 수 있을텐데, 이러한 데이터셋에서도 잘 동작할지 모르겠다.
 
 **이해못한 점**
-- 2C-loss + positive sample augmentation을 했을 때 왜 더 나쁜지에 대한 저자의 speculation을 이해하지 못함.
-- GAN에 대한 이해가 아직 부족하여 GAN 자체에 관한 지식들을 아직 다 이해하지 못함.
-  - adversarial loss
-  - Spectral Normalization
-  - Consistency Regularization
+- 거의 다 이해함.
