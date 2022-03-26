@@ -84,4 +84,4 @@ minor domain이라 괜찮은가? IQON-3000과 같은 dataset을 사용하면 안
 - data sparsity issue가 무엇인가? 단순히 user당 outfit개수가 부족한걸 data sparsity라고 하나?
 - evaluation metric으로 사용된 NDCG가 뭐지?
 - FND할 때는 data augmentation는 적용 안하는거죠?
-
+- Eq(19)는 student model을 위한 것인지?
