@@ -68,7 +68,7 @@ randomly initialized된 seed를 query로 둬서 하나의 encoder를 더 쌓아�
 ## Study
 
 **읽는데 걸린 시간**
-- 읽는데 7:00 + 정리하는데 2:05분
+- 읽는데 7:00 + 정리하는데 1:05분
 - pages: 8 (without references&appendix)
 
 **비판적 사고**
