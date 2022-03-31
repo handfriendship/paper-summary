@@ -26,4 +26,4 @@
 5. XLNet
 6. XLM
 7. Taskonomy
-11. 
+8.
