@@ -80,7 +80,7 @@
 - pages: p19 / p31 (without references&appendix) 
 
 
-**비판적 사고**
+**비판적 사고(개선점 찾기 / 비판 / 제안 등)**
 - mSDA는 domain adaptation은 잘되지만 PAD는 높다고함. 이 논문은, 자기들 방법대로 하면 source rep.와 target rep.가 구분이 안되고, 이걸 PAD가 낮아짐을 통해 보였는데, 
 mSDA는 이것에 정면으로 반하는 사례임. 이게 왜 그런지에 대한 컨셉 레벨에서라도 설명이 있었으면 좋겠다.
 - Eq (1)에 typo가 있다. source sample은 1이 되게, target sample은 0이 되어야한다고 해야하는것 아닌가?
