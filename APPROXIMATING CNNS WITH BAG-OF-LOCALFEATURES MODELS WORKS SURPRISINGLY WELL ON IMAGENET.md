@@ -75,7 +75,10 @@
 - 읽는데 3:45 + 정리하는데 1:00
 - pages: 8.5 (without references&appendix)
 
-**비판적 사고**
+**비판적 사고(개선점 찾기 / 비판 / 제안 / 향후연구 등)**
+- 이 연구는 오직 imagenet에 대한 실험만 진행함. 저자들은 bagnet이 spatial information을 levearge할 수 없는 BagNet이 좋은 성능을 보이므로 imagenet이 쉬운 데이터셋이라고 함. imagenet이 비전분야의 코어 데이터셋은 맞지만, 다른 데이터셋도 많으니, .. 다른 데이터셋에서는 어떤지 분석해주면 좋겠음. 
+- BagNet으로 각 데이터셋에 대한 성능을 낸 다음, 어떤 데이터셋에서 잘하고, 어떤 데이터셋에서 못하는지 measure하면 데이터셋들의 특성을 파악하는데 좋을 수도 있음.
+- BagNet은 spatial relation을 이용하지 못하는 모델을 밝혀내고 그것들의 decision-making과정을 말해줬는데, ViT같은 모델은 local patch뿐만 아니라 전체적인 정보를 잘 이용해서 성능이 잘나오는 모델인데, 이렇게 spatial relation을 잘 이용하는 모델을 찾아주는 것도 의미있는 연구가 될듯.
 - 
 
 **이해못한 점**
