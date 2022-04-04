@@ -16,36 +16,13 @@
 - transformer + image patch: ViT와 접근법은 똑같음. 하지만 patch size가 너무 작았다.
 
 **Main Idea**
-- 데이터셋 설계: 
-  - RottenTomatoes의 영화평론 데이터셋에 phrase-level로 감성라벨을 붙였다.
-    - 원래는 7-level(very positive, positive, somewhat positive, neutral, ...) 로 구분했는데, very positive과 positive를 합쳤다.
-    - Amazon Mechanical Turk 3명을 고용해서 labeling했다.
-    - 총 문장 개수는 11,855개 (RottenTomatoes의 개수와 같음), 총 태깅된 phrase개수는 215,154개.
-  - 데이터셋 distribution
-    - 5개의 label은 uniformly distributed되어있다.
-    - n-gram이 낮을수록 neutral이 많고, n-gram이 높을수록 uniformly distributed되어있다.
-- RNTN: 
-    - 하나의 tensor를 이용한다는 것 같다.
-    - 읽지 않아서 모르겠다.
+
 
 **Contributions**
 - summary에서 설명함.
 
 **Experiments**
-- 용어정리
-  - negation: but, although 등으로 문장의 sentiment가 반전되는 것
-- Fine-grained Sentiment For All Phrases
-  - 낮은 n-gram을 맞추는 성능은 높고, 높은 n-gram을 맞추는 성능은 낮다.
-  - 기존 bag-of-words방법론은 낮은 n-gram에선 약하고, 높은 n-gram(negation이 많아지는)에선 강하다. (아마 bag-of-words가 문장의 전체적인 통계 정보를 보는 방법이라 그런듯?)
-- Negating Positive Sentences
-  - positive sentence를 골라서 일부로 negate시킨 것. (positive -> negative로 바뀜)
-  - RNTN이 젤 잘되더라.
-- Negating Negative Sentences
-  - negative sentence를 골라서 negate시킨 것. 
-  - 'The movie was not terrible'
-  - negative -> 덜 negative
-  - RNTN이 젤 잘되더라.
-  - Figure 8.: negate를 시켰을 때 어떤 문장의 감성 분류 결과의 positive속성 또는 negative속성이 바뀌는 정도
+
 
 **총평**
 
@@ -53,10 +30,10 @@
 ## Study
 
 **읽는데 걸린 시간**
-- 읽는데 8:00 + 정리하는데 30분
+- 읽는데 5:00 + 정리하는데 30분
 - pages: 9 (without references&appendix)
 
-**비판적 사고**
+**비판적 사고(개선점 찾기 / 비판 / 제안 / 향후연구 등)**
 - Vanilla Transformer를 그대로 가져왔다는 것이 이 논문의 contribution이다.
   - Figure 1에서 소개된 Transformer Encoder는 Layer Norm의 위치가 변경되었는데, 왜 그렇게 했는지에 대한 설명이 있으면 좋겠다.
 - Table 2에서 ViT-H/14, ViT-L/16 두가지 모델의 성능이 비교되었다.
