@@ -70,8 +70,9 @@ randomly initialized된 seed를 query로 둬서 하나의 encoder를 더 쌓아�
 - 읽는데 3:30 + 정리하는데 0:55분
 - pages: 8 (without references&appendix)
 
-**비판적 사고**
-- 
+**비판적 사고(개선점 찾기 / 비판 / 제안 / 향후연구 등)**
+- ContraGAN 같은 논문은 data-to-label 정보뿐만 아니라 data-to-data relation을 이용하는데, 이 논문은 data-to-user (contragan의 data-to-label정보)만 이용함. data-to-data정보도 이용하면 성능이 오를 수도 있을듯.
+- Class를 label로 놓고 multi-label classification문제로 환원해서 푸는 연구도 재밌을듯.
 
 **이해못한 점**
 - Eq (6)에서 a_ik와 z_j의 크기를 1로 만들어야 이유가 있나요?
