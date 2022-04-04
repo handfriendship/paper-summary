@@ -61,3 +61,7 @@
 **읽는데 걸린 시간**
 - 읽는데 2:40 + 정리하는데 20분
 - pages: 10 (without references, model설명)
+
+**비판적 사고(개선점 찾기 / 비판 / 제안 / 향후연구 등)**
+- 개선점을 찾는다면 .. 현재는 Transformer가 천하통일해서 아키텍처를 Transformer기반으로 바꾸는게 가장 시급할듯. 
+- 7-level fine-grained -> 5-level fine-grained로 바꿔서 좋다면, clasification-level을 더 세세하게 둬도 괜찮을듯? 일례로, unsupervised image clustering에서는 overclustering하는게 성능향상에 도움이 된다는 것이 정설임.
