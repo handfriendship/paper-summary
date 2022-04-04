@@ -71,7 +71,7 @@ randomly initialized된 seed를 query로 둬서 하나의 encoder를 더 쌓아�
 - 읽는데 7:00 + 정리하는데 1:05분
 - pages: 8 (without references&appendix)
 
-**비판적 사고**
+**비판적 사고(개선점 찾기 / 비판 / 제안 / 향후연구 등)**
 - SimCLR를 적용할 때, 3개 중 1개를 erase/replace하는데 semantic이 preserve가 되나? (1st augment는 erase, 2nd augment는 replace)
 - abstract에서는 FND를 쓴 이유가 huge memory와 time cost때문이라고 했는데, Table 5.에 보면 required RAM이나 inference time이 딱히 안빨라졌다. backbone의 #params가 줄어들긴 했는데, 애초에 teacher model의 사이즈 자체가 크지 않아서 ..
 - Key contribution이 무엇인지 잘 모르겠다.
