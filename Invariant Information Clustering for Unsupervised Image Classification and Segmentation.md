@@ -92,7 +92,7 @@
 - 읽는데 4:30 + 정리하는데 2:05분
 - pages: 8 (without references&appendix)
 
-**비판적 사고**
+**비판적 사고(개선점 찾기 / 비판 / 제안 / 향후연구 등)**
 - 최적의 data transformation이 무엇인지 생각하지 않고, 좋다고 알려진 무작위 data transformation을 random하게 pick해서 사용하고 있다. 
   - SimCLR 연구에서는 data transformation이 중요하다고 강조하면서 brute-force 실험을 통해 어떤 transformation의 조합이 가장 좋은지를 찾으려고 한다.
   - 이 연구(IIC)에서는 좋다고 알려진 것을 단순히 쓰고 있는데, 이것은 같은 비전 분야 안에서도 각 task에서 조명하고자 하는 특징과 cue에 따라 달라질 수 있다.
