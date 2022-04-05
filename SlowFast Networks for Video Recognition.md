@@ -31,7 +31,6 @@
   - Slow Pathway
     - 목적: spatial semantic정보를 처리하는 것을 목적으로 하는 pathway
     - idea: video에서 frame을 띄엄띄엄 sampling, 많은 channel을 둬서 더 꼼꼼하게 처리
-      - 
   - Fast Pathway
     - 목적: 빠르게 변하는 motion 정보를 capture하는 것을 목적으로 하는 pathway
     - idea: video에서 frame을 자주자주 sampling, 적은 channel을 둬서 spatial semantic정보를 약하게 뽑고, 대충대충 처리
