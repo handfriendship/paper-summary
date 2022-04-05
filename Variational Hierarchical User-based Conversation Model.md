@@ -1,5 +1,5 @@
 # Variational Hierarchical User-based Conversation Model
-- Author : JinYeong Bak, Alice Oh
+- Author : JinYeong Bak et al.
 - 2019 EMNLP
 
 **Summary**
@@ -61,15 +61,15 @@ train/dev/test set을 구성함.
 **총평**
 - Contributions에서 말한대로.
 
-**질문or향후 연구방향 제시(교수님 랩면접 대비)**
-- Q1. VHUCH-PUE가 VAE를 사용한 모델 말고 다른 approach를 사용한 모델들도 outperform하는가?
-
 ## Study
 
 **읽는데 걸린 시간**
-- 읽는데 11시간 + 정리하는데 0.5 시간
+- 읽는데 6시간 + 정리하는데 0.5 시간
 - VAE 공부하는데 5시간씀.
 - Pages : 9 (Excluding References, Appendix)
+
+**비판적 사고(개선점 찾기 / 비판 / 제안 / 향후연구 등)**
+- Q1. VHUCH-PUE가 VAE를 사용한 모델 말고 다른 approach를 사용한 모델들도 outperform하는가?
 
 **알게 된 지식**
 - Variational AutoEncoder(VAE)
