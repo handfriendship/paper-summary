@@ -1,4 +1,4 @@
-# paper-summary
+# paper-summary & Practice for finding improvements
 
 - (2022.03) Domain-Adversarial Training of Neural Networks - [summary](Domain-Adversarial%20Training%20of%20Neural%20Networks.md)
 - (2022.03) APPROXIMATING CNNS WITH BAG-OF-LOCAL FEATURES MODELS WORKS SURPRISINGLY WELL ON IMAGENET - [summary](APPROXIMATING%20CNNS%20WITH%20BAG-OF-LOCAL%02FEATURES%20MODELS%20WORKS%20SURPRISINGLY%20WELL%20ON%20IMAGENET.md)
