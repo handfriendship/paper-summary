@@ -82,14 +82,14 @@
 **총평**
 - 
 
-**질문or향후 연구방향 제시(교수님 랩면접 대비)**
-- 사람이 하는 것처럼 적은 수의 geometric cue만으로도 camera calibration을 하는 방법을 연구해보겠다.
-
 ## Study
 
 **읽는데 걸린 시간**
-- 읽는데 11:30 + 정리하는데 3시간
+- 읽는데 8:00 + 정리하는데 2:30
 - pages: 14 (without references, appendix)
+
+**비판적 사고(개선점 찾기 / 비판 / 제안 / 향후연구 등)**
+- 사람이 하는 것처럼 적은 수의 geometric cue만으로도 camera calibration을 하는 방법을 연구해보겠다.
 
 **알게 된 지식**
 - Extrinsic Parameters:
