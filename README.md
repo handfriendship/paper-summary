@@ -18,7 +18,7 @@
 - (2021.09) Reducing Annotation Artifacts in Crowdsourcing Datasets for Natural Language Processing - [summary](Reducing%20Annotation%20Artifacts%20in%20Crowdsourcing%20Datasets%20for%20Natural%20Language%20Processing.md)
 
 
-# papers to be summarized
+# papers which have not been summarized
 1. ViT
 2. Shankar, Vaishaal, et al. "Evaluating Machine Accuracy on ImageNet." , ICML 2020
 3. bottom-up and top-down approach
@@ -26,4 +26,4 @@
 5. XLNet
 6. XLM
 7. Taskonomy
-8.
+8. etc..
