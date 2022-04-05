@@ -1,5 +1,5 @@
 # Weakly Supervised Pre-Training for Multi-Hop Retriever
-- Yeon Seonwoo†, Sang-Woo Lee‡§, Ji-Hoon Kim‡§, Jung-Woo Ha‡§, Alice Oh†
+- Yeon Seonwoo† et al.
 - ACL 2021
 
 **Summary**
@@ -34,7 +34,12 @@
 **총평**
 - fine-tuning부분을 잘 이해하지 못함.
 
-**질문or향후 연구방향 제시(교수님 랩면접 대비)**
+## Study
+
+**읽는데 걸린 시간**
+- 읽는데 7시간쯤 걸림. + 정리하는데 3시간 걸림.
+
+**비판적 사고(개선점 찾기 / 비판 / 제안 / 향후연구 등)**
 - Q1. 이 논문에서 제시된 실험은 죄다 LOUVRE랑 기존 연구랑 비교할 때, 기존 pre-trained된 language model을 HotPotQA dataset으로 fine-tuning시키는 것 보다 LOUVRE를 논문에서 제시한 weakly supervised방법으로 pre-trained시킨 후, HotPotQA dataset으로 fine-tuning시키면 더 잘된다! 하는 실험밖에 없는데, 기존 pre-trainined된 language model에다가 논문에서 제시한 방법으로 pre-trainined시킨 후, HotPotQA dataset으로 fine-tuning시키면 더 잘될 것 같은데요?
     - 본 실험은 LOUVRE라는 pre-training method가 다른 method보다 뛰어난지 보고자 하는 것이므로, 둘 간의 비교를 위해서는 본 실험 구성대로 하나씩 적용해서 테스트하는 것이 맞다.   
 
@@ -45,11 +50,6 @@
     - Dataset을 보고 2)이 말이 되는지 확인하기
 
 - Q3. 실험에서 Evaluation Metric을 통일해야 하는 것 아닌가요?(잘 되는 evaluation에 대해서만 figure를 그린 느낌?)
-
-## Study
-
-**읽는데 걸린 시간**
-- 읽는데 7시간쯤 걸림. + 정리하는데 3시간 걸림.
 
 **알게 된 사전지식**
 - Open Domain QA : 정해진 Document를 읽고, question에 답하는 문제가 아니라, question에 답하기 위해 retriever로 적절한 document들을 찾고, 그 후 그 안에서 reader를 통해 찾는 것
