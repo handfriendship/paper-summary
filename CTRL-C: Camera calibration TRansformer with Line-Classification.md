@@ -40,8 +40,7 @@ cross entropy loss를 쓴다.
   - horizontal line은 VP가 모여있는 것이고, 따라서 가장 먼 곳에 위치해야 하고, 그렇기에 다른 line segment들로부터 가장 멀리 떨어져있어야 되서 이런 방법을 쓰는건가?
 
 **Contributions**
-1. camera intrinsics value는 global한 characteristics를 찾는 과정인데, CNN based model은 local feature를 추출하는 것을 시작으로 점점 global feature를 추출해 나간다. 이 때 long-term dependency가
-를 잘 유지하는게 중요하고, Transformer를 adopt하여 그것을 이루었다. 이렇게 하여 SOTA를 찍었다.
+1. camera intrinsics value는 global한 characteristics를 찾는 과정인데, CNN based model은 local feature를 추출하는 것을 시작으로 점점 global feature를 추출해 나간다. 이 때long-term dependency를 잘 유지하는게 중요하고, Transformer를 adopt하여 그것을 이루었다. 이렇게 하여 SOTA를 찍었다. 
 2. end-to-end model을 만들었고, semantic cue와 geometric cue를 같이 leverage할 수 있다. (기존 related works에는 모델을 두개 만들어 두 정보를 각각 이용하게 하거나, loss function을 따로 뒀다.)
 
 **Experiments**
@@ -57,13 +56,13 @@ GSV로 training시키고 SUN360으로 test해보거나, 반대로도 해보았�
 **총평**
 - 
 
-**질문or향후 연구방향 제시(교수님 랩면접 대비)**
-- 
-
 ## Study
 
 **읽는데 걸린 시간**
 - 읽는데 5:15시간 + 정리하는데 1시간
+
+**비판적 사고(개선점 찾기 / 비판 / 제안 / 향후연구 등)**
+- Vision분야의 Transformemr에서 input image를 나눈 patch의 size는 성능에 영향을 많이 줄 수 있는 요소이다. ViT논문에서도 patch size에 대한 ablation이 있었고, ViT를 포함한 여러 논문에서도 patch size를 중요한 요소로 다룬다. 이 논문에서는 patch size의 ablation은 커녕 patch size를 얼마를 사용했는지에 대한 언급조차 없었는데, 이런 것에 대한 설명이 있었으면 더 좋았을 것 같다.
 
 **알게 된 지식**
 - camera intrinsics
