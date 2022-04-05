@@ -44,17 +44,17 @@ embedding space에 나타낸 뒤, 가장 먼 곳에 있는 word를 constraint wo
 **총평**
 - -
 
-**질문or향후 연구방향 제시(교수님 랩면접 대비)**
-- Q1. 지금은 비교적 적은 수의 사람들(MTurkers)이 crowdsourcing에 참여하는 것처럼 보이는데, 이 논문에서 제안한 문제의 intuition은, workers들이 사용하는 단어 선택이 어떤 preference를 띄고,
-그것때문에 dataset이 skewed되어 annotation artifacts가 생긴다는 것이다. 만약 훨씬 많은 사람들이 참여하게 된다면 각 개인이 영향을 미치는 비율이
-줄어들 것이고, 자연스럽게 diversity가 확보되어 annotation artifacts가 줄어들지 않을까?
-- Q2. MW방식을 쓸 때 (e.g. 5개의 constraint words) 각 5개를 동일한 제한된 횟수만큼 쓰도록 하면, SW대신 MW를 씀으로 인해 발생하는 artifacts의 증가를 줄일 수 있찌 않을까?
-
 ## Study
 
 **읽는데 걸린 시간**
 - 읽는데 4시간 + 정리하는데 0.5시간 걸림.
 - Page : 4
+
+**비판적 사고(개선점 찾기 / 비판 / 제안 / 향후연구 등)**
+- Q1. 지금은 비교적 적은 수의 사람들(MTurkers)이 crowdsourcing에 참여하는 것처럼 보이는데, 이 논문에서 제안한 문제의 intuition은, workers들이 사용하는 단어 선택이 어떤 preference를 띄고,
+그것때문에 dataset이 skewed되어 annotation artifacts가 생긴다는 것이다. 만약 훨씬 많은 사람들이 참여하게 된다면 각 개인이 영향을 미치는 비율이
+줄어들 것이고, 자연스럽게 diversity가 확보되어 annotation artifacts가 줄어들지 않을까?
+- Q2. MW방식을 쓸 때 (e.g. 5개의 constraint words) 각 5개를 동일한 제한된 횟수만큼 쓰도록 하면, SW대신 MW를 씀으로 인해 발생하는 artifacts의 증가를 줄일 수 있찌 않을까?
 
 **알게 된 사전지식**
 - PMI : 사건 A가 일어날 확률과 사건 B가 일어날 확률 중에 사건 A와 B가 동시에 일어날 확률이다. 여기서는 해당 class에서 빈도수가 가장 적은 단어라고 생각하면 될듯.
