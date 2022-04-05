@@ -1,8 +1,5 @@
 # Context-Aware Answer Extraction in Question Answering
-- Author : Yeon Seonwoo†
-, Sang-Woo Lee‡§, Ji-Hoon Kim‡§
-, Jung-Woo Ha‡§
-, Alice Oh†
+- Author : Yeon Seonwoo† et al.
 - 2020 EMNLP (Long paper)
 
 **Summary**
