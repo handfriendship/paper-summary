@@ -26,9 +26,44 @@
   - optical flow: deep learning이전에 여러 hand-crafted feature를 이용하는 방법
   - two-stream method: optical flow + another input 이렇게 2가지를 input으로 받는 방법
 
-
 **Main Idea**
-- 
+- SlowFast Network
+  - Slow Pathway
+    - 목적: spatial semantic정보를 처리하는 것을 목적으로 하는 pathway
+    - idea: video에서 frame을 띄엄띄엄 sampling, 많은 channel을 둬서 더 꼼꼼하게 처리
+      - 
+  - Fast Pathway
+    - 목적: 빠르게 변하는 motion 정보를 capture하는 것을 목적으로 하는 pathway
+    - idea: video에서 frame을 자주자주 sampling, 적은 channel을 둬서 spatial semantic정보를 약하게 뽑고, 대충대충 처리
+      - channel수를 줄이는만큼 lightweight해져서 high temporal resolution feature를 뽑는 것이 가능해짐.
+      - 논문에서는 spatial semantic정보를 약하게 capture하고 temporal정보를 강하게 capture하는 것이 바람직한 trade-off라고 말함.
+      - frame sampling을 slow pathway에 비해 8배 수준으로 늘림.
+      - channel수를 slow pathway에 비해 1/8 수준으로 줄임.
+  - lateral concatenation
+    - Time-to-channel: alpha개의 frame을 묶어서 하나의 frame가 여러개의 channel을 갖는 상태로 만드는 것임.
+    - Time-strided sampling: alpha개의 frame중 하나를 택하는 것.(이용하는 총 정보의 수가 줄어듦)
+    - Time-strided convolution: 3D conv를 수행하는 것.
+- Model Architecture
+- Action Classification
+  - Dataset: Kinetics-{400, 600}, Charades를 이용.
+  - Data Augmentation: horizontal flip, crop with shorter side randomly size 
+  - Training: no iamgenet pretraining, synchronized SGD
+  - Inference: 한 video clip에서 10개의 frame sampling, 각 frame은 짧은 쪽이 256이 되도록 scaling한 후 세번 crop. (아마 더 general한 평가를 위해?)256을 사용한듯.
+  - Architecture: backbone으로 resnet + NonLocal을 사용
+- AVA action detection
+  - Dataset: AVA dataset
+  - Data Augmentation: 사용안한듯.
+  - Training: Kinetics-400으로 pretraining
+  - Architecture: 
+    - actor localization, action detection 두 단계로 나뉨, end-to-end 아님.
+    - (1) actor localization: Detectron을 사용.(Faster R-CNN기반 + ResNeXt-101-FPN을 섞은거)
+      - Imagenet, COCO human kenpoint images로 pre-training + AVA actor detection로 fine-tuning
+    - (2) action detection: 
+      - SlowFast를 backbone으로, 그 위에 Faster R-CNN을 얹임.
+      - SlowFast res5의 spatial stride를 1로 바꾸고, 2배 dilation.
+      - 각 frame마다 RoI를 뽑고, 그걸 temporal orientation으로 global avg pooling한 뒤에, spatial orientation으로 max pooling함. 
+      - 마지막으로 각 class의 개수만큼 sigmoid classifier를 둬서 multi-label classification을 함.
+    
 
 **Contributions**
 - 기존의 보편적인 방식과 비슷한 slow pathway와 별도로 high temporal frequency를 capture하는 high pathway를 두었음.
@@ -56,7 +91,7 @@
 ## Study
 
 **읽는데 걸린 시간**
-- 읽는데 3:15 정리하는데 0:30분
+- 읽는데 3:15 정리하는데 1:10분
 - pages: p8 (without references&appendix) 
 
 
