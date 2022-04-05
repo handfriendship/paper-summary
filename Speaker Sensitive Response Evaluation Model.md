@@ -1,5 +1,5 @@
 # Speaker Sensitive Response Evaluation Model
-- Author : JinYeong Bak, Alice Oh
+- Author : JinYeong Bak et al.
 - 2020 ACL
 
 **Summary**
@@ -51,7 +51,13 @@
 **총평**
 - speaker-sensitive sample을 사용한 게 novel한 것 같음.
 
-**질문or향후 연구방향 제시(교수님 랩면접 대비)**
+## Study
+
+**읽는데 걸린 시간**
+- 읽는데 3.5시간 + 정리하는데 1:45 시간
+- Pages : 9 (Excluding References, Appendix)
+
+**비판적 사고(개선점 찾기 / 비판 / 제안 / 향후연구 등)**
 - 현재 context를 단순 concatenate시켜서 response랑 similarity를 계산하는 것 같은데(코드 확인하기), 이러면 context의 모든 부분을 동일한 가중치로 반영하게 될 것이다. (논문에는 word embedding방법은 나와있지 않고, experiment에서는 word vector를 avg하는 방법을 사용하였음.)
   - context의 모든 sentence를 concatenate시키는게 아니라, context 내의 모든 word의 embedding을 average시킨다고 논문(p5, average라고 검색)에 나와있음. 
   - (향후연구 제시) 현재 context의 embedding을 구하는 방법으로, context 내의 모든 word의 embedding을 average시킨다고 되어있는데, 이것은 embedding방법으로 적절하지 못하다. 다른 분야에서의 context의 embedding방법(e.g. LOUVRE에서 question+document(1~n-1th)을 concatenate시킨 후 embedding을 구할 때 어떤 방법을 썼는지..)을 참고해서 여기에 가져와보는건 어떨까?
@@ -61,12 +67,6 @@
   - attention을 써서(Seonwoo et al. 2020)의 Context-aware Answer Extraction in Question Answering처럼 유사도를 학습하게 해도 되고,
   - graph neural network를 써서 (정교민 교수 et al. 2020) Detecting Supporting Sentences for Question Answering via Graph Neural Networks 처럼 supporting sentence의 유사도를 학습하게 한다.
   - but, 유사도를 학습시키려면 ground-truth resposne가 context의 어느 부분과 얼마만큼 비슷하다는 label이 있어야 할 것 같음.
-
-## Study
-
-**읽는데 걸린 시간**
-- 읽는데 3.5시간 + 정리하는데 1:45 시간
-- Pages : 9 (Excluding References, Appendix)
 
 **알게 된 지식**
 - Dialogue System은 크게 Open-Domain Dialogue System과 Task-Oriented Dialogue System으로 나누어짐. 후자는 항공권 예매, 아마존 챗봇 customer service와 같이 수행해야 할 task, 해결해야할 문제가 명확하게 있는거고, 후자는 그런거 없이 노주제로 자유롭게 얘기하는걸 말하는거임.
