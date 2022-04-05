@@ -42,17 +42,17 @@ answer-span의 context probability는 1.0임. answer-span으로부터 거리에 
 **총평**
 - 최근 다루는 모델들이 너무 거대해져서, 대학원생 수준의 GPU로 모델을 training, testing하는게 너무 어려워보인다.
 
-**질문or향후 연구방향 제시(교수님 랩면접 대비)**
-- Q1. 논문에서 제안된 attention대신 multi-head attention을 써보면 어떨까요?
-- Q2. 연구에 사용된 computational resources가 적다는 이유로 epoch=3으로 BLANC와 기존 baseline 모델들을 학습시켰는데, 너무 적은것 같아요. training time(epoch)을 늘리면 baseline이 더 잘 할 수도
-있지 않을까요 ?
-- Q3. 일반적으로 context probability distribution을 구할 때 passage의 중간쯤에서 context일 확률이 높게 나오는 문제는 발생하지 않나요? 
-
 ## Study
 
 **읽는데 걸린 시간**
 - 읽는데 4시간 + 정리하는데 1시간
 - 예전에 한 번 읽었던 논문임.
+
+**비판적 사고(개선점 찾기 / 비판 / 제안 / 향후연구 등)**
+- Q1. 논문에서 제안된 attention대신 multi-head attention을 써보면 어떨까요?
+- Q2. 연구에 사용된 computational resources가 적다는 이유로 epoch=3으로 BLANC와 기존 baseline 모델들을 학습시켰는데, 너무 적은것 같아요. training time(epoch)을 늘리면 baseline이 더 잘 할 수도
+있지 않을까요 ?
+- Q3. 일반적으로 context probability distribution을 구할 때 passage의 중간쯤에서 context일 확률이 높게 나오는 문제는 발생하지 않나요? 
 
 **알게 된 지식**
 - -
