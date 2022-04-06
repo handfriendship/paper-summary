@@ -27,4 +27,5 @@
 5. XLNet
 6. XLM
 7. Taskonomy
-8. etc..
+8. Partial FC
+9. etc..
