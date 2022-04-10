@@ -25,9 +25,7 @@
 # papers which have not been summarized
 1. ViT
 2. Shankar, Vaishaal, et al. "Evaluating Machine Accuracy on ImageNet." , ICML 2020
-3. bottom-up and top-down approach
-4. ViLT
-6. XLM
-7. Taskonomy
-8. Partial FC
-9. etc..
+3. XLM
+4. Taskonomy
+5. Partial FC
+6. etc..
