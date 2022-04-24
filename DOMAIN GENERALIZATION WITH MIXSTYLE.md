@@ -27,6 +27,9 @@
       - mixstyle과 차이점:
         - 이 두가지는 target domain을 explicit하게 만드는데 반해 MixStyle은 implicit하게 만듦.
         - mixstyle은 feature-level augmentation임 vs 위 두가지는 image-level augmentation.
+    - general-purpose regularization technique이 DG분야에서는 잘 안되는 이유:
+      - regularization때문에 discriminative pattern(예측 성능에 결정적인 영향을 미치는 pattern)을 찾는데는 도움이 될 수 있으나, DG에 도움이 된다고 보장할 순 없음.
+      - 반면에 mixstyle은 새로운 style을 synthesis하는 것이므로 DG에 도움이 됨.
 - RL분야에서 generalization을 연구한 related works
   - 관심 없으니 생략..
 
@@ -77,7 +80,7 @@
 ## Study
 
 **읽는데 걸린 시간**
-- 읽는데 1:50시간 정리하는데 0:30분
+- 읽는데 1:50시간 정리하는데 1:30분
 - pages: p9 (without references&appendix) 
 
 
@@ -87,5 +90,5 @@
 **질문**
 - Domain이 다르다는 것은 image의 content는 같고 style이 다르다는 말이라고 논문에서 주장하는데, 이러한 사실은 DG분야에서 consensus가 있는건가? 아니면 단순히 논문에서 주장하는것인가?
 - alpha를 왜 꼭 beta distribution에서 뽑아야하는가? [0, 1]범위의 random number를 뽑으면 안되나?
-- Q3. 논문에서는 왜 image-level보다 feature-level이 더 좋다고 했나?
+- Q3. 논문에서는 왜 image-level보다 feature-level이 더 좋다고 했나?(intuition) (안나와있음.)
 - Q4. 논문에서는 general-purpose regularization technique이 DG에 적용이 잘 안되는 이유가 뭐라고 했나?
