@@ -11,7 +11,15 @@ data domain을 확장할 때 도메인간 변동성을 잘 모델링하는 방�
 - 2)를 구현하기 위해서는 도메인간 변동성, intra-class consistency 둘을 고려하는 covariance matrix를 만드는 것이 핵심.
 
 **Related Works(기존의 방법론, 기존의 방법에 비해 우리가 왜 더 좋은지)**
-- ㅇㅇ
+- Domain Generalization
+  - 우리 방법은 성능은 sota와 필적하면서 간단함.
+- Feature Interpolation and Augmentation
+  - 우리의 interpolation방법은 semantic정보는 보존한다. (기존 방법들은 semantic정보를 안보존)
+  - MixStyle과 비교: mixstyle은 domain label이 필요하지만 우리 방법은 안필요함.
+- Domain Randomization
+  - 다양한 rendering style을 만들어서 test data가 새로만든 data 중 하나와 비슷할 거라고 기대하는 방법
+- Stochastic Neural Network
+  - VAE처럼 training시 random variable을 추가해서 학습하는 방법
 
 **Main Idea**
 - 1)방식은 latent embedding tensor와 같은 size의 gaussian noise를 생성해서 곱하고 더하면 된다.(alpha=multiplicative noise, beta=additive noise)
@@ -35,34 +43,32 @@ data domain을 확장할 때 도메인간 변동성을 잘 모델링하는 방�
     - 현재 각 class에 속하는 sample들이 class별로 잘 분류되어있다면, 각 class의 data distribution을 따르는 방식으로 noise를 sampling하더라도 다른 class를 침범하는 sample을 만들게끔 하는 noise를 생성하지는 않을듯.
     - 만약 현재 sample들이 class별로 잘 분류되어있지 않다면, 성능을 더 해칠수도 있을 것 같은데 ..?
   - Q. 도메인간 변동성을 잘 모델링하는 방향으로 데이터 영역을 spanning하는가?
-    - A. 
- 
+    - A. 모든 domain을 다 고려한 intra-class variance를 계산한 것이므로 그렇다고 할 수 있을듯?
+- Model Architecture
+  - (Conv-Relu-Maxpool)x4 + (softmax)x1
+  - loss: ERM + lambda x (ERM-SFA)
+  - 처음 500step은 SFA를 안쓰고 warm-up을 한 후에 시작함.
+
 **Contributions**
-- mixstyle기법을 제안했다. 완전 새로운 idea는 아니고, style transfer분야에서 적용하던 기법을 들고와서 DG분야에 접목한 것이다.
+- gaussian noise를 잘 가해주는 data augmentation기법을 제안했다. 
 - 간단하고 구현하기 쉽고 plug-and-play가 가능하다.
 
 **Experiments**
-- 여러 DG benchmarks에서 실험.
-  - related works와 비교하는 실험, DG에 사용하는 다른 data augmentation기법을 적용했을 때와 비교하는 실험으로 나눌 수 있음.
-  - classification task를 잘 푸는지 보기 위함.
-  - PACS(같은 사진의 sketch, cartoon, art-painting, picture버전), Digits-DG(서로 다른 style의 숫자), Office-Home(office, home에서 볼 수 있는 물체)에서 실험함.
-  - related works와 비교했을 때는 PACS에서는 SOTA / Digits-DG, Office-Home에서는 previous sota와 약간 안좋은 성능.
-- Person re-ID와 비교
-  - instance retrieval task에도 잘 적용될 수 있는지 보기위함.
-  - person re-ID에서 실험. 서로 다른 view에서 촬영된 사람이 같은 사람인지 판단하는 task. domain generalization의 일종이라고 볼 수 있음. 
-  - 다른 data augmentation기법보다 더 좋은 성능을 보임.
-- deep RL task에도 적용해봄.
-  - unseen environment에서도 agent가 잘 동작하는지 보기 위함.
-  - 잘 동작했음. RL은 관심없으니 자세한 설명은 생략.
-- CNN model의 어느 layer에 plug해야 좋은 성능을 보이는지 실험.
-  - 앞쪽 layer의 결과가 style정보를 가지고 있기에 앞쪽에 적용하는 것이 좋음.
-  - 뒷쪽 layer의 결과(activation maps)는 content정보를 가지고 있기에 적용하면 별로 안좋음.(왜냐면 마지막 layer의 경우, 바로 pooling이 적용되서 classwise logit이 나오기때문.
-  - 앞쪽 layer와 뒷쪽 layer의 결과는 visualization을 통해 style정보를 가지고 있는지 content정보를 가지고 있는지 파악했음.
-- 기타 여러 ablation성격의 실험.
-  - mixing vs replacing
-  - random vs fixed shuffle
-  - sensitivity of hyperparameter
-  - 같은 domain내에서 augmentation을 적용해도 효과가 있음을 보이는 실험.
+- Digit-DG, VLCS, PACS 데이터셋에서 실험함.
+  - leave-one-domain-out방식으로 실험함.
+  - 하이퍼파라미터(K, lambada, iteration, etc..)는 task-specific하게 정해줌.
+  - 결과: SOTA만큼은 아니지만 필적할 만한 성능이 나왔고, 우리께 더 간단하니깐 좋다는 내용임.
+- noise distribution을 laplace distribution, uniform distribution으로 바꿔보면서 실험함.
+  - 결과: 크게 상관없대.
+- 어디에 SFA layer를 넣는게 좋은지 실험함.
+  - 결과: 크게 상관없대.
+- noise strength실험.
+  - 결과: 크게 상관없대.
+- ablation study(alpha, beta, ksaai)
+- visualization
+  - SFA를 적용하고 나면 데이터 영역이 훨씬 더 확장됨.(더 많은 도메인에 대해 generalize할 수 있다는 의미.)
+  - adaptation없이 그냥 SFA 모듈을 적용했을 때는 class boundary가 blurry해지는데 SFA를 training시키고나면 명확해짐.
+  - test domain은 train data domain보다 더 blurry한데, SFA 모듈을 training시키고나면 좀더 clear해짐.
 
 
 **총평**
@@ -80,7 +86,11 @@ data domain을 확장할 때 도메인간 변동성을 잘 모델링하는 방�
   - 현재는 하나의 batch안에 같은 domain sample만 들어있도록 주로 구성을 하는 것 같다.(맞나?)
   - 하나의 batch안에 다른 domain sample들도 있도록 구성을 한다음, in-batch contrastive learning을 적용해서 다른 domain에 속하더라도 같은 class이면 같도록 하게 한다.
   - 같은 domain인데 다른 class를 가지는 sample들은 hard-negative로 생각해서 가중치를 더 준다.(이거는 fashion에 사용되었던 논문에서 어떻게 처리했는지 보면 좋을듯)
-  - (+multiple anchor를 두는 식으로도 모델링 가능한가?)
+  - (+multiple anchor를 두는 식으로도 모델링 가능한가? domain과 무관한 class anchor를 두는것.)
+  - intuition: 
+    - multi-task learning에서 in-batch에 여러 domain의 sample들이 있도록 하는 경우도 있는데, 그때의 intuition을 찾아보기. (T5같은데서 찾을 수 있을듯)
+    - data-to-data relation을 사용가능한듯?
+      - 현재 batch = [cartoon(horse), cartoon(cat), cartoon(cow), cartoon(dog), cartoon(horse)]이렇게 구성되어 있다면 각 sample에 대해 seven category중 어느 곳에 속하는지를 softmax한 후 class-label에 해당하는 softmax value에 대해 cross-entropy를 하는 것이다. 이건 data-to-data relation을 이용하는건 아니지.
 - gaussian mixture model?
 
 **질문**
