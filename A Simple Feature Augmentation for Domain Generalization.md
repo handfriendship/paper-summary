@@ -111,6 +111,8 @@ data domain을 확장할 때 도메인간 변동성을 잘 모델링하는 방�
 - sample간의 중요도를 반영하기(hard negative)
 - class anchor를 두고 clustering처럼 풀기?(+multiple anchor를 두는 식으로도 모델링 가능한가? domain과 무관한 class anchor를 두는것.)
   - 이렇게 하려면 결국 class anchor끼리는 멀어지게 하고 intra-class sample들은 class anchor를 기준으로 가까워지게 해야해서 contrastive loss를 써야함.
+- adversarial image를 generation하는 방식으로 data manipulation을 하는데 도메인간 변동성, intra-class consistency을 고려하도록 할 순 없을까?
+  - adversarial image를 optimize할 때 covariance matrix를 고려한다던지 ..
 - gaussian mixture model?
 
 **질문**
