@@ -11,32 +11,31 @@ data domain을 확장할 때 도메인간 변동성을 잘 모델링하는 방�
 - 2)를 구현하기 위해서는 도메인간 변동성, intra-class consistency 둘을 고려하는 covariance matrix를 만드는 것이 핵심.
 
 **Related Works(기존의 방법론, 기존의 방법에 비해 우리가 왜 더 좋은지)**
-- 논문에서 차용한 idea
-  - IN(Instance Normalization)
-  - AdaIN(Adaptive Instance Normalization)
-- DG분야의 related works
-  - source domains간에 feature align을 하려는 시도
-  - adversarial loss를 이용할 때 domain classifier를 둬서 auxiliary loss로 이용함. domain augnostic feature를 배우기 위함.
-  - domain-specific parametrization을 하려는 시도
-  - meta-learning을 이용한 시도. pseudo-train, pseudo-test를 이용.
-  - Data augmentatin을 이용한 시도.
-    - domain classifier로부터 얻어진 adversarial gradient를 이용. soruce data와 멀리 떨어진 domain을 만들려는 시도인듯.
-    - pseudo/intermediate domain을 만들려는 시도
-      - DLOW(for DA): image translation model을 이용해서 intermediate domain을 만듦.
-      - L2A-OT: optimal transport를 maximizing하는 방식으로 psuedo-domain을 만듦.
-      - mixstyle과 차이점:
-        - 이 두가지는 target domain을 explicit하게 만드는데 반해 MixStyle은 implicit하게 만듦.
-        - mixstyle은 feature-level augmentation임 vs 위 두가지는 image-level augmentation.
-    - general-purpose regularization technique이 DG분야에서는 잘 안되는 이유:
-      - regularization때문에 discriminative pattern(예측 성능에 결정적인 영향을 미치는 pattern)을 찾는데는 도움이 될 수 있으나, DG에 도움이 된다고 보장할 순 없음.
-      - 반면에 mixstyle은 새로운 style을 synthesis하는 것이므로 DG에 도움이 됨.
-- RL분야에서 generalization을 연구한 related works
-  - 관심 없으니 생략..
+- ㅇㅇ
 
 **Main Idea**
 - 1)방식은 latent embedding tensor와 같은 size의 gaussian noise를 생성해서 곱하고 더하면 된다.(alpha=multiplicative noise, beta=additive noise)
 - 2)방식은 도메인간 변동성, intra-class consistency 둘을 고려하는 covariance matrix를 만드는 것이 핵심이다.
-  - covariance matrix는 KxK matrix이고, K는 mini-batch의 개수이다.(gradient accumulation을 생각하면 됨. batch_size=42, K=8이면 42크기의 batch가 8개 모인것)
+  - Covariance Matrix를 만드는 법(Digit-DG의 실험셋팅을 예로 들어봄):
+    - 1) z^i = (N, K, W, H)에서 WxH에 속하는 모든 pixel값들은 평균내서 하나의 값으로 바꾼다.
+      - N: source domain의 개수. Digit-DG의 경우 N=3. 
+      - K: #mini-batch. batch_size=42짜리인 batch들이 K개만큼 모이면 covariance matrix를 한 번 계산한다. Digit-DG의 실험셋팅의 경우 K=8.
+    - 2) 1)의 결과인 (3, 8) matrix의 각 원소는 42개의 sample을 가지고있다. 42개 중 우리가 구하려는 class의 sample들만을 추려낸다. 
+      - (이것의 평균을 구하거나 하는 식으로 1차원으로 만드는듯)
+      - channel수도 생략되었는데, 적당히 aggregation하는듯.
+    - 3) 2)의 결과인 (3, 8) matrix의 covariance matrix를 구한다. 
+      - (3, 8).T x (3, 8) = (8, 8)크기의 covariance matrix가 만들어짐.
+      - 이것의 직관적 의미는, 3을 instance의 개수, 8을 각 feature의 개수라고 봤을 때 각 feature들간의 상관관계를 구했다고 생각하면 됨.
+      - 매 K개의 mini-batch가 모일때마다 class-wise covariance matrix를 update함.
+    - 4) 3)의 결과를 covariance로 갖는 multi-variate gaussian distribution에서 k-dim noise를 N개(domain의 개수)만큼 sampling한다.
+  - Covariance Matrix의 각 항목은 모든 domain의 feature를 다 고려한 것이다.(K=8일때 8x8이면 feature가 8개 있는 것으로 생각할 수 있는데, 각 domain에 존재하는 해당 feature들을 다 aggregation한게 covariance matrix의 각 항목임.)
+  - Q. intra class consistency? 
+    - A. 각 class내에서만 도메인간 변동성을 고려하는 방향으로 covariance matrix를 만들었으니, 적어도 현재 class들의 분포보다 더 넘어가지는 않겠군. 
+    - 현재 모든 domain에 존재하는 해당 class들의 data가 다 섞여있는 상태.
+    - 현재 각 class에 속하는 sample들이 class별로 잘 분류되어있다면, 각 class의 data distribution을 따르는 방식으로 noise를 sampling하더라도 다른 class를 침범하는 sample을 만들게끔 하는 noise를 생성하지는 않을듯.
+    - 만약 현재 sample들이 class별로 잘 분류되어있지 않다면, 성능을 더 해칠수도 있을 것 같은데 ..?
+  - Q. 도메인간 변동성을 잘 모델링하는 방향으로 데이터 영역을 spanning하는가?
+    - A. 
  
 **Contributions**
 - mixstyle기법을 제안했다. 완전 새로운 idea는 아니고, style transfer분야에서 적용하던 기법을 들고와서 DG분야에 접목한 것이다.
@@ -76,14 +75,16 @@ data domain을 확장할 때 도메인간 변동성을 잘 모델링하는 방�
 - 읽는데 4:10시간 정리하는데 0:30분
 - pages: p8 (without references&appendix) 
 
-
 **비판적 사고(개선점 찾기 / 비판 / 제안 등)**
-- 
+- noise를 contrastive learning을 통해서 더 intra-class이도록 하는 분포로부터 sampling할 순 없을까?
+  - 현재는 하나의 batch안에 같은 domain sample만 들어있도록 주로 구성을 하는 것 같다.(맞나?)
+  - 하나의 batch안에 다른 domain sample들도 있도록 구성을 한다음, in-batch contrastive learning을 적용해서 다른 domain에 속하더라도 같은 class이면 같도록 하게 한다.
+  - 같은 domain인데 다른 class를 가지는 sample들은 hard-negative로 생각해서 가중치를 더 준다.(이거는 fashion에 사용되었던 논문에서 어떻게 처리했는지 보면 좋을듯)
+  - (+multiple anchor를 두는 식으로도 모델링 가능한가?)
+- gaussian mixture model?
 
 **질문**
 - Q1. SFA-A는 그렇다 쳐도 SFA-S는 왜 잘되나? 이것이 잘되는 것에 대한 intuition이 뭔가? 
 - Q1-1. SFA-A가 잘되면 general-purpose regularization technique도 DG에 효과가 있을 수 있다는 것 아닌가?
 - Q2. MixStyle은 왜 비교안하냐? 똑같은 data augmentation 종류인데?
-- Q3. 한 epoch이 끝나도 batch의 구성은 바뀌지 않아야 하는거지? batch의 순서는 바뀔 수 있어도 ..
-- Q4. 처음 시작할때는 K개의 mini-batches만 본 상태일텐데, 이걸 가지고 whole covariance를 만들 수 있는건지? -> covariance수식을 찾아볼 필요가 있을듯.
-
+- Q3. KxK covariance matrix에서 k-dim noise를 N개(domain의 개수)만큼 sampling하는건가? 아니면 같은 noise가 각 도메인에 더해지는건가?
