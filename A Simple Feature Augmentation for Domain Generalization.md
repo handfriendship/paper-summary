@@ -22,6 +22,8 @@ data domain을 확장할 때 도메인간 변동성을 잘 모델링하는 방�
   - VAE처럼 training시 random variable을 추가해서 학습하는 방법
 
 **Main Idea**
+- 방법론의 큰 분류: 이것은 raw image에 대한 augmentation이 아니라, feature에 대한 augmentation임.
+  - model의 중간 layer의 output인 activation에 대해 noise를 정해주는 것이므로.
 - 1)방식은 latent embedding tensor와 같은 size의 gaussian noise를 생성해서 곱하고 더하면 된다.(alpha=multiplicative noise, beta=additive noise)
 - 2)방식은 도메인간 변동성, intra-class consistency 둘을 고려하는 covariance matrix를 만드는 것이 핵심이다.
   - Covariance Matrix를 만드는 법(Digit-DG의 실험셋팅을 예로 들어봄):
@@ -86,18 +88,29 @@ data domain을 확장할 때 도메인간 변동성을 잘 모델링하는 방�
   - 현재는 하나의 batch안에 같은 domain sample만 들어있도록 주로 구성을 하는 것 같다.(맞나?)
   - 하나의 batch안에 다른 domain sample들도 있도록 구성을 한다음, in-batch contrastive learning을 적용해서 다른 domain에 속하더라도 같은 class이면 같도록 하게 한다.
   - 같은 domain인데 다른 class를 가지는 sample들은 hard-negative로 생각해서 가중치를 더 준다.(이거는 fashion에 사용되었던 논문에서 어떻게 처리했는지 보면 좋을듯)
-  - (+multiple anchor를 두는 식으로도 모델링 가능한가? domain과 무관한 class anchor를 두는것.)
   - intuition: 
     - multi-task learning에서 in-batch에 여러 domain의 sample들이 있도록 하는 경우도 있는데, 그때의 intuition을 찾아보기. (T5같은데서 찾을 수 있을듯)
     - data-to-data relation을 사용가능한듯?
       - 현재 batch = [cartoon(horse), cartoon(cat), cartoon(cow), cartoon(dog), cartoon(horse)]이렇게 구성되어 있다면 각 sample에 대해 seven category중 어느 곳에 속하는지를 softmax한 후 class-label에 해당하는 softmax value에 대해 cross-entropy를 하는 것이다. 이건 data-to-data relation을 이용하는건 아니지.
 - 현재 covariance를 update 해나가는 방식은 momentum처럼 decay factor를 줘서 조금씩 기존껄 떨어뜨리고 있다. 이렇게 하면 long-term dependency가 포착이 안될수도 있지 않을까? Residual Connection을 준다거나 LSTM처럼 memory cell을 둔다거나, transformer처럼 병렬적으로 더할 수 있는 방식이 있으면 좋을듯.
-  - 이런 문제가 있다는 것을 입증하려면 우선 모든 데이터를 다 고려할 수 있는 방법으로 covariance를 구한 뒤(mini-batch가 아니라 whole-batch로), 그게 성능이 더 좋다는걸 보이면 될듯
+  - 1) 우선 머릿속으로 문제점이 뭔지 구체화해보고, 아이디어가 말이 되는지, 실현가능한지를 구현 레벨 수준으로 정리해보기.
+    - Q1. 어떤 data에 대한 long-term dependency?
+      - ㅇㅇ
+    - Q2. 가장 ideal한 covariance matrix는 어떻게 구할 수 있는가?
+    - Q3. covariance matrix의 update과정이 어떻게되는가?
+  - 2) 이런 문제가 있다는 것을 입증하려면 우선 모든 데이터를 다 고려할 수 있는 방법으로 covariance를 구한 뒤(mini-batch가 아니라 whole-batch로), 그게 성능이 더 좋다는걸 보이면 될듯
   - 방법1) 그러면 어느 곳에 residual connection을 줄지를 결정해줘야 하는데, 그럴려면 batch data간 가중치를 주는게 좋을듯.
     - 가중치는 어떤 방식으로 결정할 수 있을까 ..
   - 방법2) momentum -> nesterov momentum으로 바꿔본다.
+  - 결론: 안되는 아이디어
+    - 단계1)까지 시도해봤음.
+    - 이유1) 애초에 long-term dependency를 포착할 필요가 없음.(왜냐면 이전 데이터들은 덜 optimize된거라 부정확한 covariance matrix라서 이걸 포착할 필요가 없음.
+    - 이유2) 가장 ideal한 covariance matrix를 만드는 것은 그냥 mini-batch size를 튜닝하는 정도인듯.
+      - 가장 ideal한 covariance matrix는 같은 class를 가지는 sample들을 batch로 묶지 말고 하나하나씩 공분산을 측정하는 것.
+      - 예를 들어 숫자 9 class에 속하는 sample들이 domain당 2000개씩 있다고 하면, (2000, 3) x (3, 2000)을 해서 (2000, 2000)을 만드는 것임. 물론 step수를 무한히 한다면 이게 가장 좋겠지만, mini-batch의 장점도 있음.
+- sample간의 중요도를 반영하기(hard negative)
+- class anchor를 두고 clustering처럼 풀기?(+multiple anchor를 두는 식으로도 모델링 가능한가? domain과 무관한 class anchor를 두는것.)
 - gaussian mixture model?
-- 
 
 **질문**
 - Q1. SFA-A는 그렇다 쳐도 SFA-S는 왜 잘되나? 이것이 잘되는 것에 대한 intuition이 뭔가? 
