@@ -110,6 +110,7 @@ data domain을 확장할 때 도메인간 변동성을 잘 모델링하는 방�
       - 예를 들어 숫자 9 class에 속하는 sample들이 domain당 2000개씩 있다고 하면, (2000, 3) x (3, 2000)을 해서 (2000, 2000)을 만드는 것임. 물론 step수를 무한히 한다면 이게 가장 좋겠지만, mini-batch의 장점도 있음.
 - sample간의 중요도를 반영하기(hard negative)
 - class anchor를 두고 clustering처럼 풀기?(+multiple anchor를 두는 식으로도 모델링 가능한가? domain과 무관한 class anchor를 두는것.)
+  - 이렇게 하려면 결국 class anchor끼리는 멀어지게 하고 intra-class sample들은 class anchor를 기준으로 가까워지게 해야해서 contrastive loss를 써야함.
 - gaussian mixture model?
 
 **질문**
