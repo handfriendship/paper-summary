@@ -1,7 +1,8 @@
 # paper-summary & Practice for finding improvements
 **진짜 핵심만 작성해라!!! 너무 당연한 얘기. 대강 알것 같은 이야기는 적지 말아라! 위에서 했던 소리 또한 다시 적지 말아라!!**
 
-
+- (2022.04) A Simple Feature Augmentation for Domain Generalization - [summary](A%20Simple%20Feature%20Augmentation%20for%20Domain%20Generalization.md)
+- (2022.04) DOMAIN GENERALIZATION WITH MIXSTYLE - [summary](DOMAIN%20GENERALIZATION%20WITH%20MIXSTYLE.md)
 - (2022.04) Bottom-Up and Top-Down Attention for Image Captioning and Visual Question Answering - [summary](Bottom-Up%20and%20Top-Down%20Attention%20for%20Image%20Captioning%20and%20Visual%20Question%20Answering.md)
 - (2022.04) ViLT: Vision-and-Language Transformer Without Convolution or Region Supervision - [summary](ViLT%20Vision-and-Language%20Transformer%20Without%20Convolution%20or%20Region%20Supervision.md)
 - (2022.04) SlowFast Networks for Video Recognition - [summary](SlowFast%20Networks%20for%20Video%20Recognition.md)
