@@ -112,7 +112,8 @@ data domain을 확장할 때 도메인간 변동성을 잘 모델링하는 방�
   - DG논문을 읽으면서 어떤 상황에서 어떤 부분을 maximize, 어떤 부분을 minimize해야하는지 유심히 보기
     - Domain invariant representation learning 분류에서 shared feature space에서는 여러 domain간 거리를 가깝게 하도록 학습하는 듯.
     - contrastive learning을 쓸때는 같은 class에 속하면 domain에 관계없이 가깝게 하도록 학습하는 듯.
-- 아이디어4. class anchor를 두고 clustering처럼 풀기?(+multiple anchor를 두는 식으로도 모델링 가능한가? domain과 무관한 class anchor를 두는것.)
+- 아이디어4. class anchor를 두고 clustering처럼 풀기?
+  - Q. (+multiple anchor를 두는 식으로도 모델링 가능한가? domain과 무관한 class anchor를 두는것.) A. 여러개의 anchor는 아닌거 같다. 여러 domain이 하나의 cluster가 되도록 해야함.
   - sample간의 중요도를 반영하기(hard negative)
   - 이렇게 하려면 결국 class anchor끼리는 멀어지게 하고 intra-class sample들은 class anchor를 기준으로 가까워지게 해야해서 contrastive loss를 써야함.
 - 아이디어5. adversarial image를 generation하는 방식으로 data manipulation을 하는데 도메인간 변동성, intra-class consistency을 고려하도록 할 순 없을까?
