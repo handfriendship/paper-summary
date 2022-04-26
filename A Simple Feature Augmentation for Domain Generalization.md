@@ -109,6 +109,9 @@ data domain을 확장할 때 도메인간 변동성을 잘 모델링하는 방�
       - 가장 ideal한 covariance matrix는 같은 class를 가지는 sample들을 batch로 묶지 말고 하나하나씩 공분산을 측정하는 것.
       - 예를 들어 숫자 9 class에 속하는 sample들이 domain당 2000개씩 있다고 하면, (2000, 3) x (3, 2000)을 해서 (2000, 2000)을 만드는 것임. 물론 step수를 무한히 한다면 이게 가장 좋겠지만, mini-batch의 장점도 있음.
 - 아이디어3. 정보이론 이용해서 clustering. mutual information이용해서 풀어보기.
+  - DG논문을 읽으면서 어떤 상황에서 어떤 부분을 maximize, 어떤 부분을 minimize해야하는지 유심히 보기
+    - Domain invariant representation learning 분류에서 shared feature space에서는 여러 domain간 거리를 가깝게 하도록 학습하는 듯.
+    - contrastive learning을 쓸때는 같은 class에 속하면 domain에 관계없이 가깝게 하도록 학습하는 듯.
 - 아이디어4. class anchor를 두고 clustering처럼 풀기?(+multiple anchor를 두는 식으로도 모델링 가능한가? domain과 무관한 class anchor를 두는것.)
   - sample간의 중요도를 반영하기(hard negative)
   - 이렇게 하려면 결국 class anchor끼리는 멀어지게 하고 intra-class sample들은 class anchor를 기준으로 가까워지게 해야해서 contrastive loss를 써야함.
