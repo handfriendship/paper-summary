@@ -34,3 +34,11 @@
 5. Partial FC
 6. Few-shot Font Generation with Localized Style Representations and Factorization
 7. etc..
+
+
+# papers I've heard through seminar/video/blog post/etc..
+- summarizing key papers - [summary](summarizing%20key%20papers.md)
+
+
+
+
