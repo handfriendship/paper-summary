@@ -1,6 +1,6 @@
 # The Origins and Prevalence of Texture Bias in Convolutional Neural Networks
 - Author: Oren Nuriel, Sagie Benaim, Lior Wolf
-- CVPR 2021
+- NeurIPS 2020
 
 ## 세가지가 꼭 들어가있어야 함.
 - 어떤 것을 풀려고 했는지(Summary)
@@ -30,36 +30,52 @@
     - 최근에 많은 연구들이 CNN이 texture에 bias되어있다고 주장한다. 우리는 이 현상이 나타난 원인을 분석하고자 한다.
 
 **Main Idea(어떻게 풀었는지)**
-- 1)처음에 ImageNet이 문제인지
+- 1) 처음에 ImageNet 데이터셋이 문제인지 CNN의 inductive bias자체가 문제인지 테스트해봄.
+- 2) ImageNet을 어떻게 사용하길래 문제인지 봄.
+- 3) ImageNet을 사용하면서 CNN이 texture bias되지 않는 방법을 제시함.
+  - 3-1. random crop -> center crop으로 바꿈.
+  - 3-2. self-supervised loss를 추가하는 것이 도움이 됨.
 
 **Contributions**
-- texture-bias와 다른 해석을 내놓음.
-- CNN model의 robustness와 texture recognition performance를 같이 가져갈 수 있다.
+- CNN이 texture-bias되지 않을 수 있는 방법을 제시함.
+- 왜 이런 현상이 발생하는지에 대한 답을 제시함.
+  - CNN inductive bias때문이 아니라 ImageNet때문이다.
+  - random crop
+  - 단순 supervised learning이 ImageNet의 일부 class를 구별하는 것과는 잘 맞지 않다.
+  - FC layers의 dimension이 지속적으로 감소하기 때문이이다.
 
 **Experiments**
-- 1) Batch Normalization을 쓰는게 pAdaIN에 영향을 미치지는 않나?
-- 2) Image Classification 성능
-- 3) p를 다르게 줬을 때 성능이 어떻게 변하는지
-  - p가 너무 크면 성능을 해칠 수 있음.
-- 4) Texture Recognition 성능
-  - feature representation이 얼마나 shape, texture에 대한 정보를 담고 있는지 평가하는 식으로 해당 모델에 대한 texture recognition을 평가한다.
-  - texture surface dataset에서 평가를 해본다.
-  - model은 freeze를 시키고 feature representation을 입력으로 하는 linear classifier를 texture surface dataset의 10%만 써서 학습시키고 나머지 90%로 평가한다.
-- 5) DA (on segmentation)
-  - 실험 방법(FADA 방법을 따름.):
-    - 5-1. source dataset에서 학습시킴.
-    - 5-2. target dataset으로 unsupervised + source dataset으로 supervised시킴.
-      - class-wise로 domain invariant feature를 생성(DANN처럼)
-      - source dataset은 cross-entropy로
-    - 5-3. 5-2.모델로 target dataset를 pseudo-labeling한 다음 supervised learning으로 품.
-    - 5-2. 과정 중에서 source dataset을 target dataset으로 pAdaIN augment시킴.
-- 6) DG
-- 7) Robustness towrad corruptions
-  - noise, lur, pixelated, JPEG corruption은 성능 향상이 조금밖에 없음.(global statistics는 보존되고 fine-detail에 대해 corrpution이 가해진 경우인데, 우리는 global statistics은 보지 않고 fine-detail, shape같은걸 보고 판단하기 때문에)
-  - weather, contrast corruption에 대해서는 성능 향상이 많음.
-- 8) Ablation study
-  - x에 대한 gradient를 backprop시킬 때 pi(x)에 대한 weight도 update하면 어떨까?
-    - x에 대한 gradient가 pi(x)도 update시키기 때문에 부적절하다.(AdaIN(x)를 할 때 pi(x)에 대한 mean, var에 pi(x)가 포함되어 있어서 gradient가 여기로도 흘러들어감.)
+- 1) CNNs can learn shape as easily as texture
+  - 목적: 애초에 CNN이 shape를 배울 수 없는 모델인지, CNN은 shape을 배울 수 있는데 dataset이 잘못된건지 알아보기 위함.
+  - 가설: 만약 CNN이 shape을 배우지 못한다면 shape을 label로 줘서 supervised learning을 시켜도 배우지 못할 것이다.
+  - 실험방법: AlexNet과 ResNet을 대상으로 GST, Navon, ImageNet-C를 shape label과 texture label로 학습시켜본다.
+  - 결과: CNN이 shape을 잘 배울 수 있음. ImageNet의 문제임.
+- 2) The role of data augmentation in texture bias
+  - 목적: 자주 사용되는 data augmentation들 중 어떤 것이 texture-bias를 일으키는지 혹은 줄이는지 알아본다.
+  - 가설&실험방법: random-crop을 적용했을 때의 변화를 본다 / naturalistic augmentation을 적용했을 때의 변화를 본다.
+  - 결과:
+    - random-crop은 안좋음.
+    - naturalistic augmentation은 좋음.
+    - naturalistic augmentation은 additive(stack)이 가능함.
+    - shape-bias를 높여줄수록 OOD robustness가 올라감.
+    - shape-bias를 높여줄수록 imagenet top1 accuracy는 낮아짐.(trade-off)
+- 3) Effect of training objective
+  - 목적: 현재 training objective가 texture-bias를 일으키고 있는지 진단 & 이를 극복할 수 있는 self-supervised learning
+  - 가설: shape에 더 집중해야 잘 풀 수 있도록 하는 self-supervised learning을 쓰면 더 좋아질 것이다.
+  - 실험방법:
+    - Rotation
+    - Exampler
+    - BigBiGAN
+    - SimCLR
+  - 결과:
+    - 어떤 모델을 쓰는지와는 상관없더라.
+    - 기존 supervised objective에다가 SimCLR objective를 합쳤을 때 shape-bias가 더 높아지는걸로 봐서, 확실히 적절한 self-supervised learning을 쓰는게 도움이 된다.
+      - 만약 가장 좋은 성능인 SimCLR를 Supervised learning에다가 합쳤을 때 별 성능향상이 없었다면 현지 supervised loss도 충분히 shape-bias를 잘보고 있는 것
+- 4) Effect of architecture
+  - 높은 top1 accuracy => high-shape인건 맞지만, high shape => high top1 acc인건 아니다.
+  - convolution을 attention으로 바꿔봤을때도 texture-bias가 생기는걸로 봐서 architecture문제가 아니라 dataset문제이다.
+- 5) Degree of representation of shape and texture in ImageNet models
+  - FC layer에서 dimension이 좁아질수록 shape-bias가 더 줄어드는걸로 봐서 이게 문제이다. encoder(backbone)은 문제가 아니다.
 
 **총평**
 - domain generalization
@@ -67,7 +83,7 @@
 ## Study
 
 **읽는데 걸린 시간**
-- 읽는데 2:55시간 정리하는데 0:30분
+- 읽는데 2:55시간 정리하는데 1:20분
 - pages: p8 (without references&appendix) 
 
 **비판적 사고(개선점 찾기 / 비판 / 제안 등)**
