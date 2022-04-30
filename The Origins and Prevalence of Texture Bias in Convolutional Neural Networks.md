@@ -21,22 +21,16 @@
   - 기존에는 CNN이 texture-bias라고 설명하는 연구가 지배적이었다. 
   - 근데 robust한 CNN모델을 만들려면 꼭 texture-debias시켜야 할까? texture recognition성능도 같이 높일 수는 없을까?
 - 2)기존의 방법에 비해 왜 더 좋은가요?
-  - Bias toward texture
-    - 기존 방법론은 성능 감소가 발생하고, 특히 texture recognition성능이 안좋아지는데 우리의 방법은 robust + texture recognition성능안감소 이다.
-    - 기존 방법론과 conclusion도 다르다.(우리 주장은, texture recognition과 성능 향상이 함께할 수 있다는 것이다.)
-    - architecture or new objective를 제시하는 방법론은 간접적으로 texture-bias를 줄이는데, 반면 우리가 global statistics bias를 줄이는 방법은 직접적(mean, var를 바로 건드림)이다.
-  - Normalization을 하는 연구들
-    - 기존 normalization technique들은 효과적인 training을 위한 것인데, 우리 방법은 network가 shape, fine detail에 집중할 수 있도록 하는 방법론이다.(global statistics에 bias되지 않기 때문에 다른 cue를 보게됨.
-  - AdaIN을 사용하는 연구들
-    - 기존 AdaIn계열 연구들은 generative modeling, style transfer를 위한 것인데, 우리 방법은 image recognition을 더 잘하고 더 robust하게 하기 위함이다.
+  - Adversarial training을 통해서 모델을 OOD data에 대해 더 robust하게 만드는 학습 방법
+    - OOD에는 좋을지 몰라도 다른 형태의 perturbation에도 강인하다는 보장이 없다.(ImageNet-C 같은걸 생각하면 될듯?)
+  - Data Augmentation and Robustness
+    - augmentation기법을 적용하면 해당 augmentation에 해당하는 robustness를 얻을 순 있어도 다른 형태의 corrpution에는 잘 대응하지 못할 수 있다.
+    - 자연적인 distribution shift에는 잘 대응하지 못할 수도 있다.(우리는 인위적인 perturbation을 쓴 거니깐.)
+  - sensitivity of CNNs to non-shape features
+    - 최근에 많은 연구들이 CNN이 texture에 bias되어있다고 주장한다. 우리는 이 현상이 나타난 원인을 분석하고자 한다.
 
 **Main Idea(어떻게 풀었는지)**
-- pAdaIN
-  - 각 sample에 대한 pair를 짝지어 준다.
-  - in-batch내의 sample을 뽑아 pair로 쓰고, 기준 sample의 mean, var를 pair의 mean, var로 교체한다.
-    - in-batch에서 뽑는 이유는, 같은 distribution에서 뽑기 위함이다.(random한 mean, var로 교체하지 않는 이유.)
-  - channel-wise로 적용된다.
-  - CNN model의 모든 layer마다 적용된다.
+- 1)처음에 ImageNet이 문제인지
 
 **Contributions**
 - texture-bias와 다른 해석을 내놓음.
