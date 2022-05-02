@@ -92,3 +92,7 @@
 - alpha를 왜 꼭 beta distribution에서 뽑아야하는가? [0, 1]범위의 random number를 뽑으면 안되나?
 - Q3. 논문에서는 왜 image-level보다 feature-level이 더 좋다고 했나?(intuition) (안나와있음.)
 - Q4. 논문에서는 general-purpose regularization technique이 DG에 적용이 잘 안되는 이유가 뭐라고 했나?
+
+**한계점**
+- MixStyle can only produce image features with interpolated domain styles. (p7, Adversarial Teacher-Student Representation Learning for Domain Generalization)
+- MixStyle은 style=domain이라는 가정이 필요하지 않을까? (내생각)
