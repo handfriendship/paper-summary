@@ -1,8 +1,8 @@
 # paper-summary & Practice for finding improvements
 **진짜 핵심만 작성해라!!! 너무 당연한 얘기. 대강 알것 같은 이야기는 적지 말아라! 위에서 했던 소리 또한 다시 적지 말아라!!**
 
-- (2022.05) Adversarial Teacher-Student Representation Learning for Domain Generalization
-- (2022.05) Deep Domain-Adversarial Image Generation for Domain Generalisation
+- (2022.05) Adversarial Teacher-Student Representation Learning for Domain Generalization- [summary](Adversarial%20Teacher-Student%20Representation%20Learning%20for%20Domain%20Generalization.md)
+- (2022.05) Deep Domain-Adversarial Image Generation for Domain Generalisation- [summary](Deep%20Domain-Adversarial%20Image%20Generation%20for%20Domain%20Generalisation.md)
 - (2022.04) The Origins and Prevalence of Texture Bias in Convolutional Neural Networks - [summary](The%20Origins%20and%20Prevalence%20of%20Texture%20Bias%20in%20Convolutional%20Neural%20Networks.md)
 - (2022.04) Permuted AdaIN: Reducing the Bias Towards Global Statistics in Image Classification - [summary](Permuted%20AdaIN%20Reducing%20the%20Bias%20Towards%20Global%20Statistics%20in%20Image%20Classification.md)
 - (2022.04) IMAGENET-TRAINED CNNS ARE BIASED TOWARDS TEXTURE; INCREASING SHAPE BIAS IMPROVES ACCURACY AND ROBUSTNESS - [summary](IMAGENET-TRAINED%20CNNS%20ARE%20BIASED%20TOWARDS%20TEXTURE%20INCREASING%20SHAPE%20BIAS%20IMPROVES%20ACCURACY%20AND%20ROBUSTNESS.md)
