@@ -2,6 +2,11 @@
 - Author: Pan Li1, Da Li2,3, Wei Li, Shaogang Gong, Yanwei Fu4, Timothy M. Hospedales
 - ICCV 2021
 
+## 세가지가 꼭 들어가있어야 함.
+- 어떤 것을 풀려고 했는지(Summary)
+- 기존에는 무슨 문제가 있는지, 기존의 방법에 비해 우리가 왜 더 좋은지(Related Works)
+- 어떻게 풀었는지(Main)
+
 **Summary**
 - 아주 단순하게 Gaussian Noise를 latent feature에 잘 더해주는 augmentation방식이 DG에 잘 동작하더라는 것을 보이는 논문.
 - Gaussian Noise를 두 가지 다른 방식으로 더해줌. 1)그냥 더하기 2)data간의 covariance matrix를 만들어서 도메인간 변동성과 intra-class category를 잘 분류할 수 있는 방향으로 noise를 주는 방식.
