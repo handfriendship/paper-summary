@@ -1,6 +1,6 @@
-# Progressive Domain Expansion Network for Single Domain Generalization
-- Author: Li et al.
-- CVPR 2021
+# Learning to Diversify for Single Domain Generalization
+- Author: Zijian Wang, Yadan Luo, Ruihong Qiu, Zi Huang, Mahsa Baktashmotlagh
+- ICCV 2021
 
 ## 세가지가 꼭 들어가있어야 함.
 - 어떤 것을 풀려고 했는지(Summary)
@@ -9,12 +9,10 @@
 
 **Summary**
 - 어떤 것을 풀려고 했나요?
-  - single DG에서 safe, effect한 data augmentation을 탐색하고자 했다.
-- Single Domain Generalization에서 synthesized image로 domain을 확장해가면서도 합성된 sample에서 invariant feature를 찾아낼 수 있도록 하는 모델을 만들어서 문제를 풀어볼까 했다.
-- adversarial training + AdaIN계열의 augmentation + self-supervised learning을 사용했다.
-- domain을 확장하기 위해 합성한 sample은 AdaIN계열의 augmentation을 이용한 결과이다.
-- 도메인 확장을 위해 추가된 sample들에서도 invariant representation을 뽑아낼 수 있는 task model M을 만들기 위해 CL을 썼다.
-- 반면에 G는 diverse sample을 만들어야하기 때문에 task model M과는 반대로 optimize되도록 하는 adversarial loss를 사용했다.
+  - DG문제를 Mutual Information관점에서 바라보고 풀고 싶다. Mutual Information을 maximzie하는 방식으로 semantic information은 보존하고 style은 diverse하도록 학습하는 문제를 풀게 하고 싶어서, 그러한 시스템으로 문제를 구성하고 싶다.
+- style을 synthesize하는 network는 MI를 minimize해서 교집합이 없게(source domain sample과 다르게) 학습하고 싶고, domain-invariant feature extractor인 backbone은 MI를 maximize해서 semantic information을 공유하도록 학습시킴(min-max)
+- style-complement module은 MI를 minimize, Backbone은 MI를 maximize
+
 
 **Related Works(기존의 방법론, 기존의 방법에 비해 우리가 왜 더 좋은지)**
 - 1)기존에는 무슨 문제가 있나요?
@@ -27,11 +25,11 @@
 
 **Main Idea(어떻게 풀었는지)**
 - Intuition
-  - Q1. M과 G를 jointly optimize시키는 이유? 
-    - M의 classifier가 optimize될 때 그 loss가 G까지 흘러간다. M은 unified domain을 보면서 그것에서 invariant representation을 뽑도록 학습이 되어있고, 
+  - Q1. style component의 transformation network가 여러개 있는 이유?
+    - ?
 G에서 생성한 sample이 그러한 semantic을 가진 sample이 되도록 G가 학습되는 것.
-  - Q2. CL을 하는 이유?
-    - M의 입장에서, 같은 semantic의 sample을 가깝게 하기 위함. G의 입장에서는 anchor sample과 최대한 먼 sample을 생헝하게 하기 위함.
+  - Q2. Backbone은 MI를 maximize, Style-component은 MI를 minimize?
+    - 생략
   - Q3. adversarial training을 하는 이유?
     - 생략.
 - 학습과정
@@ -63,7 +61,7 @@ G에서 생성한 sample이 그러한 semantic을 가진 sample이 되도록 G�
 ## Study
 
 **읽는데 걸린 시간**
-- 읽는데 1:57시간 정리하는데 0:35분
+- 읽는데 3:35시간 정리하는데 0:35분
 - pages: p10 (without references&appendix) 
 
 **비판적 사고(개선점 찾기 / 비판 / 제안 등)**
