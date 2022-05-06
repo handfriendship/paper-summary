@@ -16,60 +16,53 @@
 
 **Related Works(기존의 방법론, 기존의 방법에 비해 우리가 왜 더 좋은지)**
 - 1)기존에는 무슨 문제가 있나요?
-  - 1-1. DG를 위한 data augmentation을 사용할 때, 사용할 augmentation기법으로 무엇을 선택할지, 얼마만큼의 강도로 augmentation을 줘야할지 결정하는 것이 어렵다는 문제가 있다.
-  - 1-2. 또한 augmented data가 safe한지, effect한지 gaurantee하기 어렵다는 문제가 있다.
+  - Single-DG분야에서의 접근방법들은 다 color/texture에 한해서 augmentation을 하는 것이다.
 - 2)기존의 방법에 비해 왜 더 좋은가요?
-  - 1-1.의 문제를 해결했다. 이 논문에서 사용한 data augmentation기법은 AdaIN인데, 이 framework은 꼭 autoencoder가 아니고 STN, HRNet이어도 된다. 즉, 어떤 Generator를 사용하든 상관없이 동작한다.
-    - DG분야에서는 어떤 domain이 target으로 올지 결정할 수 없는데, 그걸 몰라도 풀 task(e.g. image classification)만 알면 쓸 수 있는 기법.
-  - 1-2.의 문제를 해결했다. safe, effect를 보장하기 위한 여러 objective를 제시했다.
+  - 우리의 domain diversifying전략은 style/texture/apperance관점에서 domain을 확장하는 것이다.
+    - 솔직히 말은 이렇게 하는데, 정말 이걸 위해서 이전 연구들에 비해 더 신경쓴 부분이 뭔지 모르겠다.(AdaIN을 적용할 때 feature map의 pixel-wise로 mean, val을 적용했다는거?)
+- adversarial image를 생성하는 방법론은, 어짜피 adversarial image도 같은 domain의 다른 class가 될 확률을 높이는 것이라서 새로운 target distribution을 커버할 때까지 domain을 diverse하는데에는 한계가 있다.
+
 
 **Main Idea(어떻게 풀었는지)**
 - Intuition
-  - Q1. style component의 transformation network가 여러개 있는 이유?
-    - ?
-G에서 생성한 sample이 그러한 semantic을 가진 sample이 되도록 G가 학습되는 것.
-  - Q2. Backbone은 MI를 maximize, Style-component은 MI를 minimize?
-    - 생략
-  - Q3. adversarial training을 하는 이유?
-    - 생략.
+  - Q1. 이 논문의 아이디어가 domain을 점진적으로 확장해나가는건가?
+    - ㅇㅇ. 왜냐면 feature-map의 pixel-wise mu, sigma가 서서히 학습되어가는거기 때문에, 더 많이 학습될수록 domain을 점점더 확장해나간다고 볼 수 있음.
+  - Q2. 두 개의 sample에 대해서 MI를 구하는 거였나?
+    - ㅇㅇ수식이 그럼. 임의로 선택된 synthesized sample과 original sample사이의 mutual information을 다룸.
+  - Q3. min-max처럼 MI를 maximize했다가 minimize했다가 한다는데, 이게 생각처럼 균형이 맞게 학습이 되나? G는 original sample과 generated sample간의 diversity가 높아지기 위해서 MI의 upperbound를 작게 만들어야 하고, task model은 latent space에서 같은 semantic의 sample들끼리 가까워져야 하므로 MI를 maximize해야한다. 만약 G에서 MI의 upperbound를 작게 만드는것이 diversity가 높아지는게 아니라 semantic information이 멀어지게 하는 것이면 어떡하나? task model에서 MI를 maximize하는 것이 semantic을 가깝게 하는게 아니라 generated sample의 style정보를 가깝게 하는것이면 어떡하나?
+    - 그럴까봐 장치를 걸어둠. G에게는 Semantic Consistency(class conditional maximum mean discrepancy를 minimize시키는것) loss를 두고, task model에게는 contrastive learning loss를 둠.
 - 학습과정
-  - 1) M, G를 jointly optimize시킨다.(M, G의 parameter update)
-  - 2) G에서 생성한 synthesized images에 M을 fine-tuning시킨다.
-  - 3) G에서 생성한 synthesized images를 source domain과 합친다.
-  - 4) M을 unified domain에 다시 tuning한다.
-  - 5) G를 새롭게 initialize하고 M과 함께 optimize시킨다.
+
 - Objective
 - Architecture 
 
 **Contributions**
-- safe, effect한 data augmentation을 잘 적용할 수 있도록 하는 framework을 제시함.
+- MI를 이용한 framework을 제시함.
+- 기존의 AdaIN방식을 조금 바꿔서 feature map에서의 pixel-wise한 방법을 적용함.
 
 **Experiments**
-- Digits-dataset, CIFAR10-C, SYNTHIA dataset에서 평가.
-- Evaluation protocol
-  - Digits-dataset의 경우, MNIST만 source, 나머지를 target domains. source dataset을 돌아가면서 해보지는 않음.
-  - CIFAR10-C의 경우 CIFAR10을 source, CIFAR10-C를 target
-  - ..생략
-- hyperparameter tuning 
-  - # iterations, loss scaling parameter
-- Few-shot Domain Adaptation
-  - target domain의 sample을 몇개만 보여줌(parameter update ㅇㅇ)
+- Digits-DG, PACS, Corrupted CIFAR-10
+- t-SNE visualization
+- hyperparameter tuning
+- ablation study
+  - style-complement network, min MI., max MI., style modification(AdaIN의 변형) 
 
 **총평**
-- augmented data가 가져야 할 조건(safety, effectiveness)에 대해서 다시 한 번 생각해 보게 한 논문.
+- Mutual Information을 적용해볼까 하는 생각은 있었는데, 어떻게 적용하는지 이걸 보니깐 깨닫게 됬다. 
 
 ## Study
 
 **읽는데 걸린 시간**
-- 읽는데 3:35시간 정리하는데 0:35분
-- pages: p10 (without references&appendix) 
+- 읽는데 3:35시간 정리하는데 2:30분
+- pages: p8 (without references&appendix) 
 
 **비판적 사고(개선점 찾기 / 비판 / 제안 등)**
-- 아이디어1. evaluating protocol을 제시하면 어떨까? 새로운 데이터셋을 synthesize해서 거기서 evaluate를 한다던가 ...
+- 아이디어1. AdaIN을 적용할 때 feature map의 pixel-wise로 mean, val을 적용했다. 기존 연구들은 feature map당 하나의 mean, var가 존재하고. 이거의 적절한 중간 지점을 찾을 순 없을까?
+  - 지금 드는 생각으로는, 그럴려면 feature map내에서 비슷한 pixel들끼리 aggregate할 수 있어야 할텐데, 이걸 하려면 뭔가 network이 더 필요할 것 같기도 하다..
 
 **질문(의문점)**
-- Q1. 중간에 task model M이 overfitting되어서 성능을 저해할 위험은 없는가? M은 early stopping을 하는가? training procedure가 어떻게되지?
-- Q2. G를 안버리고 계속 쓰면 어떻게되나? 
-- Q3. L_unseen으로 학습하면 L_div도 task model M을 학습할 때 적용되는건가? 아니면 L_div는 G에만 적용되는건가?
-- Q4. MNIST-test set에 validate을 해도 되는건가?
-
+- Q1. min-max처럼 MI를 maximize했다가 minimize했다가 한다는데, 이게 생각처럼 균형이 맞게 학습이 되나? G는 original sample과 generated sample간의 diversity가 높아지기 위해서 MI의 upperbound를 작게 만들어야 하고, task model은 latent space에서 같은 semantic의 sample들끼리 가까워져야 하므로 MI를 maximize해야한다. 만약 G에서 MI의 upperbound를 작게 만드는것이 diversity가 높아지는게 아니라 semantic information이 멀어지게 하는 것이면 어떡하나? task model에서 MI를 maximize하는 것이 semantic을 가깝게 하는게 아니라 generated sample의 style정보를 가깝게 하는것이면 어떡하나?
+- Q2. 하나의 feature map당 하나의 mean, var를 두는게 아니라 pixel level로 mean, var를 두는게 더 좋은 이유에 대한 직관은 무엇인가?
+  - 더 diverse하게 domain을 augment할 수 있다.
+- Q3. K개의 transformation을 뒀는데, 그냥 transformation module은 하나만 두고 channel을 늘리는 것보다 더 좋은 효과가 있나?
+- Q4. 이 논문의 아이디어가 domain을 점진적으로 확장해나가는건가?
