@@ -130,3 +130,4 @@ data domain을 확장할 때 도메인간 변동성을 잘 모델링하는 방�
 - Q1-1. SFA-A가 잘되면 general-purpose regularization technique도 DG에 효과가 있을 수 있다는 것 아닌가?
 - Q2. MixStyle은 왜 비교안하냐? 똑같은 data augmentation 종류인데?
 - Q3. KxK covariance matrix에서 k-dim noise를 N개(domain의 개수)만큼 sampling하는건가? 아니면 같은 noise가 각 도메인에 더해지는건가?
+- Q4. 하나의 batch안에는 하나의 domain에서 온 sample만 있나?
