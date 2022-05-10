@@ -1,6 +1,7 @@
 # paper-summary & Practice for finding improvements
 **진짜 핵심만 작성해라!!! 너무 당연한 얘기. 대강 알것 같은 이야기는 적지 말아라! 위에서 했던 소리 또한 다시 적지 말아라!!**
 
+- (2022.05) Domain Generalization via Feature Variation Decorrelation - [summary](Domain%20Generalization%20via%20Feature%20Variation%20Decorrelation.md)
 - (2022.05) Learning to Diversify for Single Domain Generalization - [summary](Learning%20to%20Diversify%20for%20Single%20Domain%20Generalization.md)
 - (2022.05) Progressive Domain Expansion Network for Single Domain Generalization - [summary](Progressive%20Domain%20Expansion%20Network%20for%20Single%20Domain%20Generalization.md)
 - (2022.05) UNCERTAINTY MODELING FOR OUT-OF-DISTRIBUTION GENERALIZATION - [summary](UNCERTAINTY%20MODELING%20FOR%20OUT-OF-DISTRIBUTION%20GENERALIZATION.md)
