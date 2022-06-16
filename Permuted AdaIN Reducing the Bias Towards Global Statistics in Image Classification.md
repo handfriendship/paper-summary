@@ -76,5 +76,7 @@
 - pages: p8 (without references&appendix) 
 
 **비판적 사고(개선점 찾기 / 비판 / 제안 등)**
-- ...
+- AdaIN계열의 모델 중 가장 naive한 방법. 
+- intensity, direction이 제한된다. (intensity의 경우에는 MixStyle보다 더 제한된다. 단순히 swap하는 경우이므로 Mixstyle에서 lambda=1인 경우)
+- pair sample을 그대로 사용하지 말고, 그것을 활용해서 augment를 위한 다른 sample을 만드는 것을 하면 어떨까 ..
 
