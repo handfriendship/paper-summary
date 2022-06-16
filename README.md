@@ -1,11 +1,9 @@
 # paper-summary & Practice for finding improvements
 **진짜 핵심만 작성해라!!! 너무 당연한 얘기. 대강 알것 같은 이야기는 적지 말아라! 위에서 했던 소리 또한 다시 적지 말아라!!**
 
-- (2022.05) Domain Generalization via Feature Variation Decorrelation - [summary](Domain%20Generalization%20via%20Feature%20Variation%20Decorrelation.md)
 - (2022.05) Learning to Diversify for Single Domain Generalization - [summary](Learning%20to%20Diversify%20for%20Single%20Domain%20Generalization.md)
 - (2022.05) Progressive Domain Expansion Network for Single Domain Generalization - [summary](Progressive%20Domain%20Expansion%20Network%20for%20Single%20Domain%20Generalization.md)
 - (2022.05) UNCERTAINTY MODELING FOR OUT-OF-DISTRIBUTION GENERALIZATION - [summary](UNCERTAINTY%20MODELING%20FOR%20OUT-OF-DISTRIBUTION%20GENERALIZATION.md)
-- (2022.05) Adversarial Teacher-Student Representation Learning for Domain Generalization- [summary](Adversarial%20Teacher-Student%20Representation%20Learning%20for%20Domain%20Generalization.md)
 - (2022.05) Deep Domain-Adversarial Image Generation for Domain Generalisation - [summary](Deep%20Domain-Adversarial%20Image%20Generation%20for%20Domain%20Generalisation.md)
 - (2022.04) The Origins and Prevalence of Texture Bias in Convolutional Neural Networks - [summary](The%20Origins%20and%20Prevalence%20of%20Texture%20Bias%20in%20Convolutional%20Neural%20Networks.md)
 - (2022.04) Permuted AdaIN: Reducing the Bias Towards Global Statistics in Image Classification - [summary](Permuted%20AdaIN%20Reducing%20the%20Bias%20Towards%20Global%20Statistics%20in%20Image%20Classification.md)
