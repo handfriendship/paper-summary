@@ -47,7 +47,7 @@ answer-span의 context probability는 1.0임. answer-span으로부터 거리에 
 
 **비판적 사고(개선점 찾기 / 비판 / 제안 / 향후연구 등)**
 - Q1. 논문에서 제안된 attention대신 multi-head attention을 써보면 어떨까요?
-- Q2. 연구에 사용된 computational resources가 적다는 이유로 epoch=3으로 BLANC와 기존 baseline 모델들을 학습시켰는데, 너무 적은것 같아요. training time(epoch)을 늘리면 baseline이 더 잘 할 수도
+- Q2. 연구에 사용된 computational resources가 적어서 epoch=3으로 BLANC와 기존 baseline 모델들을 학습시켰는데, 너무 적은것 같아요. training time(epoch)을 늘리면 baseline이 더 잘 할 수도
 있지 않을까요 ?
 - Q3. 일반적으로 context probability distribution을 구할 때 passage의 중간쯤에서 context일 확률이 높게 나오는 문제는 발생하지 않나요? 
 
@@ -55,4 +55,4 @@ answer-span의 context probability는 1.0임. answer-span으로부터 거리에 
 - -
 
 **아직까지 모르는 부분**
-- 논문에서 나오는 answer-span, answer-text이란 용어가 아직까지 정확히 무엇을 지칭하는지 모르겠다.  
+
