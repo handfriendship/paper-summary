@@ -40,16 +40,16 @@
 - 읽는데 7시간쯤 걸림. + 정리하는데 3시간 걸림.
 
 **비판적 사고(개선점 찾기 / 비판 / 제안 / 향후연구 등)**
-- Q1. 이 논문에서 제시된 실험은 죄다 LOUVRE랑 기존 연구랑 비교할 때, 기존 pre-trained된 language model을 HotPotQA dataset으로 fine-tuning시키는 것 보다 LOUVRE를 논문에서 제시한 weakly supervised방법으로 pre-trained시킨 후, HotPotQA dataset으로 fine-tuning시키면 더 잘된다! 하는 실험밖에 없는데, 기존 pre-trainined된 language model에다가 논문에서 제시한 방법으로 pre-trainined시킨 후, HotPotQA dataset으로 fine-tuning시키면 더 잘될 것 같은데요?
+- Q1. 이 논문에서 제시된 실험은 LOUVRE랑 기존 연구랑 비교할 때, 기존 pre-trained된 language model을 HotPotQA dataset으로 fine-tuning시키는 것 보다 LOUVRE를 논문에서 제시한 weakly supervised방법으로 pre-trained시킨 후, HotPotQA dataset으로 fine-tuning시키면 더 잘된다! 하는 실험인데, 기존 pre-trainined된 language model에다가 논문에서 제시한 방법으로 pre-trainined시킨 후, HotPotQA dataset으로 fine-tuning시키면 더 잘되지 않을까요?
     - 본 실험은 LOUVRE라는 pre-training method가 다른 method보다 뛰어난지 보고자 하는 것이므로, 둘 간의 비교를 위해서는 본 실험 구성대로 하나씩 적용해서 테스트하는 것이 맞다.   
 
-- Q2. weakly supervised를 하기 위해 dataset을 만들 때, Document B의 맨 첫 문장에서 Bridge Entity를 지운 채 re-phrasing을 하고, Document B에서도 Bridge Entity(Subatomic particles)를 지운다고 했다. 하지만 Bridge Entity를 지워도 그것이 추출된 document의 문장 내 다른 단어들을 너무 많이 그대로 포함하고 있는데, 이러면 extractive한 정보가 너무 많이 들어가있어 retrieval이 너무 쉽게 되는 문제점을 가지고 있진 않던가요?
+- Q2. weakly supervised를 하기 위해 dataset을 만들 때, Document B의 맨 첫 문장에서 Bridge Entity를 지운 채 re-phrasing을 하고, Document B에서도 Bridge Entity(Subatomic particles)를 지운다고 했다. 하지만 Bridge Entity를 지워도 그것이 추출된 document의 문장 내 다른 단어들을 너무 많이 그대로 포함하고 있는데, 이러면 extractive한 정보가 너무 많이 들어가있어 retrieval이 너무 쉽게 되는 문제점을 가지고 있진 않을까..?
     - 1) Document B에서 첫 줄을 전부 삭제 or BERT의 masking기법을 이용하면 어떨까요?
     - 2) 혹은, 어짜피 dataset을 만드는 과정은 prior 과정일텐데, 다른 모델을 가져와서 abstract한 방향으로 paraphrasing하거나 하면 안될까요?
     - Loss Function을 보고 retrieval이 쉽게 되는 과정이랑 document encoder가 학습되는 거랑의 관련성을 보기
     - Dataset을 보고 2)이 말이 되는지 확인하기
 
-- Q3. 실험에서 Evaluation Metric을 통일해야 하는 것 아닌가요?(잘 되는 evaluation에 대해서만 figure를 그린 느낌?)
+- Q3. 실험에서 Evaluation Metric을 통일하지 않아도 되나요?
 
 **알게 된 사전지식**
 - Open Domain QA : 정해진 Document를 읽고, question에 답하는 문제가 아니라, question에 답하기 위해 retriever로 적절한 document들을 찾고, 그 후 그 안에서 reader를 통해 찾는 것
