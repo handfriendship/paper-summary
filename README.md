@@ -5,6 +5,8 @@
 - (2022.05) Progressive Domain Expansion Network for Single Domain Generalization - [summary](Progressive%20Domain%20Expansion%20Network%20for%20Single%20Domain%20Generalization.md)
 - (2022.05) UNCERTAINTY MODELING FOR OUT-OF-DISTRIBUTION GENERALIZATION - [summary](UNCERTAINTY%20MODELING%20FOR%20OUT-OF-DISTRIBUTION%20GENERALIZATION.md)
 - (2022.05) Deep Domain-Adversarial Image Generation for Domain Generalisation - [summary](Deep%20Domain-Adversarial%20Image%20Generation%20for%20Domain%20Generalisation.md)
+- (2022.05) Domain Generalization via Feature Variation Decorrelation - summary
+- (2022.05) Adversarial Teacher-Student Representation Learning for Domain Generalization- [summary](Adversarial%20Teacher-Student%20Representation%20Learning%20for%20Domain%20Generalization.md)
 - (2022.04) The Origins and Prevalence of Texture Bias in Convolutional Neural Networks - [summary](The%20Origins%20and%20Prevalence%20of%20Texture%20Bias%20in%20Convolutional%20Neural%20Networks.md)
 - (2022.04) Permuted AdaIN: Reducing the Bias Towards Global Statistics in Image Classification - [summary](Permuted%20AdaIN%20Reducing%20the%20Bias%20Towards%20Global%20Statistics%20in%20Image%20Classification.md)
 - (2022.04) IMAGENET-TRAINED CNNS ARE BIASED TOWARDS TEXTURE; INCREASING SHAPE BIAS IMPROVES ACCURACY AND ROBUSTNESS - [summary](IMAGENET-TRAINED%20CNNS%20ARE%20BIASED%20TOWARDS%20TEXTURE%20INCREASING%20SHAPE%20BIAS%20IMPROVES%20ACCURACY%20AND%20ROBUSTNESS.md)
