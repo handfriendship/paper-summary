@@ -61,11 +61,10 @@
 - 현재 context를 단순 concatenate시켜서 response랑 similarity를 계산하는 것 같은데(코드 확인하기), 이러면 context의 모든 부분을 동일한 가중치로 반영하게 될 것이다. (논문에는 word embedding방법은 나와있지 않고, experiment에서는 word vector를 avg하는 방법을 사용하였음.)
   - context의 모든 sentence를 concatenate시키는게 아니라, context 내의 모든 word의 embedding을 average시킨다고 논문(p5, average라고 검색)에 나와있음. 
   - (향후연구 제시) 현재 context의 embedding을 구하는 방법으로, context 내의 모든 word의 embedding을 average시킨다고 되어있는데, 이것은 embedding방법으로 적절하지 못하다. 다른 분야에서의 context의 embedding방법(e.g. LOUVRE에서 question+document(1~n-1th)을 concatenate시킨 후 embedding을 구할 때 어떤 방법을 썼는지..)을 참고해서 여기에 가져와보는건 어떨까?
-  - (향후연구 제시2) 현재 V(c)와 V(r_hat)의 similarity를 구할 때 단순히 embedding을 바로 이용해서 학습한다. 하지만 통상적으로 high dimention space에서 similarity를 바로 비교하는 것은 그다지 좋은 방법이 아니다. 이것을 latent space로 바꿔서(manifold learning, e.g. VAE나 autoencoder로) 그것들의 similarity를 비교하게 하는 것이 어떨까? (<-> but 다른 분야에서도 embedding값을 바로 cosine similarity로 비교하는 것 같긴 하던데..)
 - SSREM의 구조는 함수 f, g의 결과를 mix시키는 것인데, f는 context와 generated response가 얼마나 비슷한지 보는 것이고, g는 generated response와 ground-truth response가 얼마나 비슷한지 보는 것이다. f의 성능을 향상시킬 수 있다면 더 좋은 SSREM이 되지 않을까?
   - 단순히 시간 순서대로, 최근의 utterance일수록 더 큰 가중치를 둬서 context에 response를 반영하게 해도 되고, 
   - attention을 써서(Seonwoo et al. 2020)의 Context-aware Answer Extraction in Question Answering처럼 유사도를 학습하게 해도 되고,
-  - graph neural network를 써서 (정교민 교수 et al. 2020) Detecting Supporting Sentences for Question Answering via Graph Neural Networks 처럼 supporting sentence의 유사도를 학습하게 한다.
+  - graph neural network를 써서 (정교민 교수님 et al. 2020) Detecting Supporting Sentences for Question Answering via Graph Neural Networks 처럼 supporting sentence의 유사도를 학습하게 한다.
   - but, 유사도를 학습시키려면 ground-truth resposne가 context의 어느 부분과 얼마만큼 비슷하다는 label이 있어야 할 것 같음.
 
 **알게 된 지식**
